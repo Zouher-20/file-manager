@@ -84,24 +84,27 @@ const MyFiles = () => {
           itemList={["free", "used", "reserved"]}
           listName="Status"
         />
-        <div className="flex w-full max-sm:justify-center">
-          <button
-            className="btn btn-square btn-outline btn-primary "
-            onClick={() => {
-              const modal = document.getElementById("add_user_modal");
-              if (modal !== null) {
-                /// todo : send file to redux
-                // dispatch({ type: LOAD_MODAL_DATA, file });
-                modal.showModal();
-              }
-            }}
-          >
-            <Icon className="h-8 w-8" icon={"solar:user-broken"} />
-          </button>
-          <button className="btn btn-square btn-outline btn-primary mx-3">
-            <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
-          </button>
-        </div>
+
+        {id && (
+          <div className="flex w-full max-sm:justify-center">
+            <button
+              className="btn btn-square btn-outline btn-primary "
+              onClick={() => {
+                const modal = document.getElementById("add_user_modal");
+                if (modal !== null) {
+                  /// todo : send file to redux
+                  // dispatch({ type: LOAD_MODAL_DATA, file });
+                  modal.showModal();
+                }
+              }}
+            >
+              <Icon className="h-8 w-8" icon={"solar:user-broken"} />
+            </button>
+            <button className="btn btn-square btn-outline btn-primary mx-3">
+              <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
+            </button>
+          </div>
+        )}
       </div>
       <div
         className={

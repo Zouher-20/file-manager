@@ -8,47 +8,8 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
 
   return (
     <div className="flex flex-col gap-4 rounded-lg bg-gray-100 px-4 py-2 text-sm">
-      <div className="flex flex-row-reverse gap-2">
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0}>
-            <Icon className="h-4 w-4 " icon={"pepicons-pop:dots-y"} />
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow"
-          >
-            <li>
-              <a
-                onClick={() => {
-                  const modal = document.getElementById("update_modal");
-                  if (modal !== null) {
-                    /// todo : send file to redux
-                    // dispatch({ type: LOAD_MODAL_DATA, file });
-                    modal.showModal();
-                  }
-                }}
-              >
-                update
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => {
-                  const modal = document.getElementById("delete_modal");
-                  if (modal !== null) {
-                    /// todo : send file to redux
-                    // dispatch({ type: LOAD_MODAL_DATA, file });
-                    modal.showModal();
-                  }
-                }}
-              >
-                delete
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <Icon className="h-4 w-4 text-primary" icon={"bytesize:download"} />
+      <div className="flex flex-row-reverse">
+        <FileDropDownComponent />
       </div>
       <div className="mb-auto flex justify-center">
         <Icon className="h-12 w-12 text-gray-500" icon={"ci:file-blank"} />
@@ -65,3 +26,48 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
 };
 
 export default FileCard;
+function FileDropDownComponent() {
+  return (
+    <div className="dropdown dropdown-end">
+      <label tabIndex={0}>
+        <Icon className="h-4 w-4 " icon={"pepicons-pop:dots-y"} />
+      </label>
+      <ul
+        tabIndex={0}
+        className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow"
+      >
+        <li>
+          <a
+            onClick={() => {
+              const modal = document.getElementById("update_modal");
+              if (modal !== null) {
+                /// todo : send file to redux
+                // dispatch({ type: LOAD_MODAL_DATA, file });
+                modal.showModal();
+              }
+            }}
+          >
+            details
+          </a>
+        </li>
+        <li>
+          <a
+            onClick={() => {
+              const modal = document.getElementById("delete_modal");
+              if (modal !== null) {
+                /// todo : send file to redux
+                // dispatch({ type: LOAD_MODAL_DATA, file });
+                modal.showModal();
+              }
+            }}
+          >
+            delete
+          </a>
+        </li>
+        <li>
+          <a>download</a>
+        </li>
+      </ul>
+    </div>
+  );
+}

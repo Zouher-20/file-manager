@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 const Table = ({ folders }: { folders: fileInterface["folders"] }) => {
   return (
-    <table className="table table-zebra table-sm border-2">
+    <table className="table table-zebra table-sm">
       <thead className="bg-primary text-white">
         <tr>
           <th></th>
