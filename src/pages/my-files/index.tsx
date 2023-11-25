@@ -1,10 +1,13 @@
-import FileCard from "~/components/card";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState, useEffect } from "react";
 import Table from "~/components/table";
 import UpdateModal from "~/components/modal/update_modal";
 import DeleteModal from "~/components/modal/delete_modal";
+import AddNewUserModal from "./../../components/modal/add_users_modal";
+import GridListComponent from "~/components/grid_list_component";
+import DropDownCommponent from "~/components/drop_down_component";
+import FileCard from "~/components/card";
 import { useRouter } from "next/router";
 
 const MyFiles = () => {
@@ -60,48 +63,42 @@ const MyFiles = () => {
 
   return (
     <div className="flex h-[82vh] flex-col gap-1">
+      <AddNewUserModal />
       <UpdateModal />
       <DeleteModal />
       <span className=" text-2xl font-bold">
         {id ? group.name : "All Files"} {id}
       </span>
-      <div className="mr-4 grid gap-4 pl-8 sm:flex">
-        <span className=" text-2xl font-bold sm:mr-auto">Files (4)</span>
-        <select
-          className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]"
-          defaultValue={"free"}
-        >
-          <option>free</option>
-          <option>used</option>
-          <option>reserved</option>
-        </select>
-
-        <select
-          className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]"
+      <div className="my-2 mr-4 grid items-center gap-4 sm:flex sm:flex-row-reverse">
+        <GridListComponent
+          vertical={vertical}
+          setVertical={(vertical: string) => setVertical(vertical)}
+        />
+        <DropDownCommponent
           defaultValue={"newest"}
-        >
-          <option>newest</option>
-          <option>latest</option>
-        </select>
-        <div className="join join-vertical lg:join-horizontal">
-          <div
-            onClick={() => setVertical("grid")}
-            className={
-              "join-item flex justify-center px-2 py-1 " +
-              (vertical === "grid" ? " bg-primary text-white" : "border")
-            }
+          itemList={["newest", "latest"]}
+        />
+        <DropDownCommponent
+          defaultValue={"free"}
+          itemList={["free", "used", "reserved"]}
+        />
+        <div className="flex w-full max-sm:justify-center">
+          <button
+            className="btn btn-square btn-outline btn-primary "
+            onClick={() => {
+              const modal = document.getElementById("add_user_modal");
+              if (modal !== null) {
+                /// todo : send file to redux
+                // dispatch({ type: LOAD_MODAL_DATA, file });
+                modal.showModal();
+              }
+            }}
           >
-            <Icon className="h-6 w-6" icon={"mingcute:grid-line"} />
-          </div>
-          <div
-            onClick={() => setVertical("list")}
-            className={
-              "join-item flex justify-center px-2 py-1 " +
-              (vertical === "list" ? " bg-primary text-white" : "border")
-            }
-          >
-            <Icon className="h-6 w-6 " icon={"bi:list"} />
-          </div>
+            <Icon className="h-8 w-8" icon={"solar:user-broken"} />
+          </button>
+          <button className="btn btn-square btn-outline btn-primary mx-3">
+            <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
+          </button>
         </div>
       </div>
       <div

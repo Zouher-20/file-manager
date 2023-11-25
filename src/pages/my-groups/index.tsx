@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useEffect, useState } from "react";
 import Table from "~/components/foldersTable";
+import GridListComponent from "~/components/grid_list_component";
 
 const MyGroups = () => {
   const [folders, setFolders] = useState([
@@ -36,29 +37,18 @@ const MyGroups = () => {
     <div className="flex h-[82vh] flex-col gap-1">
       <span className=" text-2xl font-bold">Groups (4)</span>
       <div className="mr-4 grid gap-4 sm:flex sm:flex-row-reverse">
-        <div className="join join-vertical lg:join-horizontal">
-          <div
-            onClick={() => setVertical("grid")}
-            className={
-              "join-item flex justify-center px-2 py-1 " +
-              (vertical === "grid" ? " bg-primary text-white" : "border")
-            }
-          >
-            <Icon className="h-6 w-6" icon={"mingcute:grid-line"} />
-          </div>
-          <div
-            onClick={() => setVertical("list")}
-            className={
-              "join-item flex justify-center px-2 py-1 " +
-              (vertical === "list" ? " bg-primary text-white" : "border")
-            }
-          >
-            <Icon className="h-6 w-6 " icon={"bi:list"} />
-          </div>
-        </div>
+        <GridListComponent
+          vertical={vertical}
+          setVertical={(vertical: string) => setVertical(vertical)}
+        />
         <button
           className="btn btn-primary btn-sm capitalize text-white"
-          onClick={() => document.getElementById("my_modal_1").showModal()}
+          onClick={() => {
+            const modal = document.getElementById("my_modal_1");
+            if (modal !== null) {
+              modal?.showModal();
+            }
+          }}
         >
           Create group +
         </button>

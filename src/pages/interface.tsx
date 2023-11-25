@@ -4,4 +4,7 @@ export interface fileInterface {
 
   folders: Array<fileInterface["folder"]>;
   folder: { id: number; name: string; state: string; date: string };
+
+  users: Array<fileInterface["user"]>;
+  user: { name: string; id: number; email: string };
 }
