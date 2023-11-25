@@ -1,14 +1,14 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { connect } from "react-redux";
-import { fileInterface } from "~/pages/interface";
 
 const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
 });
 
 function AddNewUserModal(props: any) {
-  var disable: boolean = false;
+  var [disable, setDisable] = useState(true);
+  var selectedItemCount = useRef(0);
   const [items, updateItem] = useState([
     { name: "majd", id: 1, email: "alshalabi211@gmail.com", selected: false },
     { name: "majd", id: 2, email: "alshalabi211@gmail.com", selected: false },
@@ -31,7 +31,14 @@ function AddNewUserModal(props: any) {
             const index: number = items.indexOf(currentItem);
             if (index !== -1) {
               const newItems = [...items];
+              if (newItems[index]?.selected) {
+                selectedItemCount.current = selectedItemCount.current - 1;
+              } else {
+                selectedItemCount.current = selectedItemCount.current + 1;
+              }
               newItems[index]!.selected = !(newItems[index]?.selected ?? false);
+              if (selectedItemCount.current === 0) setDisable(true);
+              if (selectedItemCount.current === 1) setDisable(false);
               updateItem(newItems);
             }
           }}
@@ -82,13 +89,13 @@ function UserList(props: any) {
                 props.onSelect(item);
               }}
             >
-              {item.selected && (
+              {!item.selected && (
                 <Icon
                   className="h-8 w-8"
                   icon={"solar:user-check-bold-duotone"}
                 />
               )}
-              {!item.selected && (
+              {item.selected && (
                 <Icon
                   className="h-8 w-8"
                   icon={"solar:user-cross-bold-duotone"}
