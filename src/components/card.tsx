@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
 
-const Card = ({ card }: { card: fileInterface["card"] }) => {
+const Card = ({ card }: { card: fileInterface["file"] }) => {
   return (
     <div className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 px-4 py-2 text-sm">
       <div className="flex flex-row-reverse gap-2">

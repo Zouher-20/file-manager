@@ -1,6 +1,7 @@
 export interface fileInterface {
-  cards: Array<{ id: number; name: string; state: string; date: string }>;
-  card: { id: number; name: string; state: string; date: string };
+  files: Array<fileInterface["file"]>;
+  file: { id: number; name: string; state: string; date: string };
 
-  table: Array<Array<string> | Array<{}>>;
+  folders: Array<fileInterface["folder"]>;
+  folder: { id: number; name: string; state: string; date: string };
 }

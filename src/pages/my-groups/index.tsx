@@ -1,11 +1,11 @@
-import Card from "~/components/folder";
+import FolderCard from "~/components/folder";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState } from "react";
-import Table from "~/components/table";
+import Table from "~/components/foldersTable";
 
 const MyGroups = () => {
-  const Cards: fileInterface["cards"] = [
+  const folders: fileInterface["folders"] = [
     { id: 1, name: "Book name aa1", state: "free", date: "22/4/2001" },
     { id: 2, name: "Book name aa1", state: "free", date: "22/4/2001" },
     { id: 3, name: "Book name aa1", state: "free", date: "22/4/2001" },
@@ -75,15 +75,15 @@ const MyGroups = () => {
         }
       >
         {vertical === "grid" ? (
-          Cards.map((card: fileInterface["card"]) => {
+          folders.map((folder: fileInterface["folder"]) => {
             return (
-              <div key={card.id}>
-                <Card card={card} />
+              <div key={folder.id}>
+                <FolderCard folder={folder} />
               </div>
             );
           })
         ) : (
-          <Table cards={Cards} />
+          <Table folders={folders} />
         )}
       </div>
     </div>

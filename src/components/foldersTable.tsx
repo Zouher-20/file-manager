@@ -1,7 +1,7 @@
 import { fileInterface } from "~/pages/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const Table = ({ files }: { files: fileInterface["files"] }) => {
+const Table = ({ folders }: { folders: fileInterface["folders"] }) => {
   return (
     <table className="table table-zebra table-sm border-2">
       <thead className="bg-primary text-white">
@@ -15,18 +15,18 @@ const Table = ({ files }: { files: fileInterface["files"] }) => {
         </tr>
       </thead>
       <tbody className="h-fit">
-        {files.map((file: fileInterface["file"]) => {
+        {folders.map((folder: fileInterface["folder"]) => {
           return (
-            <tr key={file.id}>
-              <th>{file.id}</th>
+            <tr key={folder.id}>
+              <th>{folder.id}</th>
               <td>
                 <Icon
                   className="h-6 w-6 text-gray-500"
                   icon={"mdi:file-document-outline"}
                 />
               </td>
-              <td>{file.name}</td>
-              <td>{file.state}</td>
+              <td>{folder.name}</td>
+              <td>{folder.state}</td>
               <td>22/4/2004</td>
               <td>actions</td>
             </tr>

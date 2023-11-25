@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
 
-const Folder = ({ card }: { card: fileInterface["card"] }) => {
+const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
   return (
     <div className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 p-4 text-sm">
       {/* <div className="flex flex-row-reverse gap-2"></div> */}
@@ -37,8 +37,8 @@ const Folder = ({ card }: { card: fileInterface["card"] }) => {
         </div>
       </div>
       <div className="grid">
-        <span className=" font-bold">{card.name}</span>
-        <span className=" text-gray-500">{card.state} files</span>
+        <span className=" font-bold">{folder.name}</span>
+        <span className=" text-gray-500">{folder.state} files</span>
       </div>
     </div>
   );
