@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
 });
 
-function UpdateModal(props) {
+function UpdateModal(props: any) {
   return (
     <dialog id="update_modal" className="modal">
       <div className="modal-box">
@@ -30,7 +30,7 @@ function UpdateModal(props) {
 }
 export default connect(mapStateToProps)(UpdateModal);
 
-function DataSectionComponenet(props) {
+function DataSectionComponenet(props: any) {
   return (
     <div className="flex justify-between">
       <p className="py-4 text-xs text-black">{props.name}:</p>
@@ -39,7 +39,7 @@ function DataSectionComponenet(props) {
   );
 }
 
-function DescriptionSection(props) {
+function DescriptionSection(props: any) {
   var description = props.description;
   if (!props.description) {
     description =

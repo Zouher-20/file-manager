@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
 });
 
-function DeleteModal(props) {
+function DeleteModal(props: any) {
   return (
     <dialog id="delete_modal" className="modal">
       <div className="modal-box">

@@ -1,9 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
 import { useDispatch } from "react-redux";
-import { LOAD_MODAL_DATA } from "~/redux/action_type_constant";
 
-const FileCard = ({ card }: { card: fileInterface["file"] }) => {
+export const Card = ({ card }: { card: fileInterface["file"] }) => {
   const dispatch = useDispatch();
 
   return (
@@ -63,5 +62,3 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
     </div>
   );
 };
-
-export default FileCard;
