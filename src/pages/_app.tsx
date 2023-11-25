@@ -6,6 +6,8 @@ import { Inter } from "next/font/google";
 export const inter = Inter({ subsets: ["latin"] });
 import "~/styles/globals.css";
 import { ThemeProvider } from "next-themes";
+import Appbar from "~/components/appbar";
+import Head from "next/head";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,8 +16,19 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ThemeProvider>
-        <div className={`${inter.className} antialiased`}>
-          <Component {...pageProps} />
+        <Head>
+          <title>File Manager</title>
+          <meta
+            name="description"
+            content="a small functional file manager project"
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Appbar />
+        <div className="flex w-screen max-w-[1360px] justify-center px-8 py-3">
+          <div className={`${inter.className} w-full  antialiased`}>
+            <Component {...pageProps} />
+          </div>
         </div>
       </ThemeProvider>
     </SessionProvider>
