@@ -77,33 +77,38 @@ const MyFiles = () => {
         <DropDownCommponent
           defaultValue={"newest"}
           itemList={["newest", "latest"]}
+          listName="Order by"
         />
         <DropDownCommponent
           defaultValue={"free"}
           itemList={["free", "used", "reserved"]}
+          listName="Status"
         />
-        <div className="flex w-full max-sm:justify-center">
-          <button
-            className="btn btn-square btn-outline btn-primary "
-            onClick={() => {
-              const modal = document.getElementById("add_user_modal");
-              if (modal !== null) {
-                /// todo : send file to redux
-                // dispatch({ type: LOAD_MODAL_DATA, file });
-                modal.showModal();
-              }
-            }}
-          >
-            <Icon className="h-8 w-8" icon={"solar:user-broken"} />
-          </button>
-          <button className="btn btn-square btn-outline btn-primary mx-3">
-            <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
-          </button>
-        </div>
+
+        {id && (
+          <div className="flex w-full max-sm:justify-center">
+            <button
+              className="btn btn-square btn-outline btn-primary "
+              onClick={() => {
+                const modal = document.getElementById("add_user_modal");
+                if (modal !== null) {
+                  /// todo : send file to redux
+                  // dispatch({ type: LOAD_MODAL_DATA, file });
+                  modal.showModal();
+                }
+              }}
+            >
+              <Icon className="h-8 w-8" icon={"solar:user-broken"} />
+            </button>
+            <button className="btn btn-square btn-outline btn-primary mx-3">
+              <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
+            </button>
+          </div>
+        )}
       </div>
       <div
         className={
-          "xs:overflow-x-hidden xs:px-12 grid overflow-y-auto py-4 " +
+          "xs:overflow-x-hidden xs:px-12 grid py-4 " +
           (vertical === "grid"
             ? "gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-5"
             : "")

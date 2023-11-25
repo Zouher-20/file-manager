@@ -33,8 +33,8 @@ export default connect(mapStateToProps)(UpdateModal);
 function DataSectionComponenet(props: any) {
   return (
     <div className="flex justify-between">
-      <p className="py-4 text-xs text-black">{props.name}:</p>
-      <p className="py-4 text-sm font-bold text-black">{props.data}</p>
+      <p className="py-4 text-xs">{props.name}:</p>
+      <p className="py-4 text-sm font-bold">{props.data}</p>
     </div>
   );
 }
@@ -47,7 +47,7 @@ function DescriptionSection(props: any) {
   }
   return (
     <div>
-      <p className="py-4 text-xs text-black">Description</p>
+      <p className="py-4 text-xs">Description</p>
       <div className="card w-full border-2 border-gray-500 border-opacity-5 bg-gray-600 bg-opacity-5">
         <div className="card-body">
           <p>{description}</p>
