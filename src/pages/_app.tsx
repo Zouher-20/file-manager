@@ -8,6 +8,8 @@ import "~/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import Appbar from "~/components/appbar";
 import Head from "next/head";
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -15,22 +17,24 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider>
-        <Head>
-          <title>File Manager</title>
-          <meta
-            name="description"
-            content="a small functional file manager project"
-          />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <Appbar />
-        <div className="flex w-screen max-w-[1360px] justify-center px-8 py-3">
-          <div className={`${inter.className} w-full  antialiased`}>
-            <Component {...pageProps} />
+      <Provider store={store}>
+        <ThemeProvider>
+          <Head>
+            <title>File Manager</title>
+            <meta
+              name="description"
+              content="a small functional file manager project"
+            />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <Appbar />
+          <div className="flex w-screen max-w-[1360px] justify-center px-8 py-3">
+            <div className={`${inter.className} w-full  antialiased`}>
+              <Component {...pageProps} />
+            </div>
           </div>
-        </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
     </SessionProvider>
   );
 };
