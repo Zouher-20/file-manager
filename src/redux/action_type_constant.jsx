@@ -1,0 +1,1 @@
+export const LOAD_MODAL_DATA = "LOAD_MODAL_DATA";

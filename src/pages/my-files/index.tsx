@@ -3,6 +3,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState } from "react";
 import Table from "~/components/table";
+import UpdateModal from "~/components/modal/update_modal";
+import DeleteModal from "~/components/modal/delete_modal";
 
 const MyFiles = () => {
   const files: fileInterface["files"] = [
@@ -27,6 +29,8 @@ const MyFiles = () => {
 
   return (
     <div className="flex h-[82vh] flex-col gap-1">
+      <UpdateModal />
+      <DeleteModal />
       <span className=" text-2xl font-bold">Files (4)</span>
       <div className="mr-4 grid gap-4 sm:flex sm:flex-row-reverse">
         <div className="join join-vertical lg:join-horizontal">
@@ -49,13 +53,19 @@ const MyFiles = () => {
             <Icon className="h-6 w-6 " icon={"bi:list"} />
           </div>
         </div>
-        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]" defaultValue={"free"}>
+        <select
+          className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]"
+          defaultValue={"free"}
+        >
           <option>free</option>
           <option>used</option>
           <option>reserved</option>
         </select>
 
-        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]" defaultValue={"newest"}>
+        <select
+          className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]"
+          defaultValue={"newest"}
+        >
           <option>newest</option>
           <option>latest</option>
         </select>
