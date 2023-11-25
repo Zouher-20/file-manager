@@ -5,7 +5,10 @@ import Link from "next/link";
 const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
   return (
     <Link
-      href={`/my-groups/${folder.id}`}
+      href={{
+        pathname: "/my-files",
+        query: { id: folder.id },
+      }}
       className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 p-4 text-sm"
     >
       {/* <div className="flex flex-row-reverse gap-2"></div> */}
