@@ -1,7 +1,11 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
+import { useDispatch } from "react-redux";
+import { LOAD_MODAL_DATA } from "~/redux/action_type_constant";
 
 const Card = ({ card }: { card: fileInterface["file"] }) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 px-4 py-2 text-sm">
       <div className="flex flex-row-reverse gap-2">
@@ -14,10 +18,32 @@ const Card = ({ card }: { card: fileInterface["file"] }) => {
             className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
-              <a>Item 1</a>
+              <a
+                onClick={() => {
+                  const modal = document.getElementById("update_modal");
+                  if (modal !== null) {
+                    /// todo : send file to redux
+                    // dispatch({ type: LOAD_MODAL_DATA, file });
+                    modal.showModal();
+                  }
+                }}
+              >
+                update
+              </a>
             </li>
             <li>
-              <a>Item 2</a>
+              <a
+                onClick={() => {
+                  const modal = document.getElementById("delete_modal");
+                  if (modal !== null) {
+                    /// todo : send file to redux
+                    // dispatch({ type: LOAD_MODAL_DATA, file });
+                    modal.showModal();
+                  }
+                }}
+              >
+                delete
+              </a>
             </li>
           </ul>
         </div>
