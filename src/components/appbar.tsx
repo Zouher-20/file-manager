@@ -86,7 +86,6 @@ const Appbar = () => {
 
       <div className="navbar-end flex gap-4">
         <ThemeChanger />
-        <Icon className="h-8 w-8" icon={"mdi:account-circle-outline"} />
       </div>
     </div>
   );

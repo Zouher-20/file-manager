@@ -57,7 +57,7 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
         <span className="mr-auto font-bold">{card.name}</span>
         <div className="flex">
           <span className="mr-auto text-green-500">{card.state}</span>
-          <div>{card.date}</div>
+          <span>{card.date}</span>
         </div>
       </div>
     </div>

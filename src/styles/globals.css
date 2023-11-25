@@ -1,25 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&family=Vina+Sans&display=swap");
 
 /* width */
 ::-webkit-scrollbar {
-    width: 5px;
+  width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: oklch(var(--p));
-    border-radius: 5px;
+  background: oklch(var(--p));
+  border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: oklch(var(--s));
+  background: oklch(var(--s));
+}
+
+body,
+* {
+  font-family: "Exo 2", sans-serif;
 }

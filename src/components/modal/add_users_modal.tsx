@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRef, useState } from "react";
 import { connect } from "react-redux";
+import SearchFeild from "../search_field";
 
 const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
@@ -25,6 +26,7 @@ function AddNewUserModal(props: any) {
           </button>
         </form>
         <h3 className="text-lg font-bold">Select user to add to this group!</h3>
+        <SearchFeild />
         <UserList
           items={items}
           onSelect={(currentItem: any) => {
@@ -70,19 +72,8 @@ function UserList(props: any) {
     <div className="grid grid-cols-1 divide-y">
       {props.items.map((item: any) => {
         return (
-          <div className="flex items-center justify-between p-3" key={item.id}>
-            <div className="flex">
-              {item.selected && (
-                <Icon
-                  className="mx-3 h-8 w-8 text-primary"
-                  icon={"solar:check-circle-broken"}
-                />
-              )}
-              <div>
-                <p className="text-sm font-bold text-black">{item.name}</p>
-                <p className="text-xs font-medium text-black">{item.email}</p>
-              </div>
-            </div>
+          <div className="flex items-center justify-between py-3" key={item.id}>
+            <UserInUsersListComponent item={item} />
             <button
               className="btn btn-circle btn-ghost btn-sm"
               onClick={() => {
@@ -105,6 +96,27 @@ function UserList(props: any) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function UserInUsersListComponent({ item }: { item: any }) {
+  return (
+    <div className="flex">
+      {item.selected && (
+        <Icon
+          className="mx-3 h-8 w-8 text-primary"
+          icon={"solar:check-circle-broken"}
+        />
+      )}
+      {!item.selected && (
+        <Icon className="mx-3 h-8 w-8 text-primary" icon={"ph:circle"} />
+      )}
+
+      <div>
+        <p className="text-sm font-bold">{item.name}</p>
+        <p className="text-xs font-medium">{item.email}</p>
+      </div>
     </div>
   );
 }
