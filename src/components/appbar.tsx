@@ -16,7 +16,6 @@ const Appbar = () => {
   });
 
   const links: LinksInterface["links"] = [
-    { id: 1, path: "/", name: "Home Page" },
     { id: 2, path: "/my-files", name: "My Files" },
     { id: 3, path: "/my-groups", name: "My Groups" },
     // { id: 4, path: "/discover", name: "Discover" },

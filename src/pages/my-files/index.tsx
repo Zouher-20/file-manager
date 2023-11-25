@@ -49,19 +49,13 @@ const MyFiles = () => {
             <Icon className="h-6 w-6 " icon={"bi:list"} />
           </div>
         </div>
-        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]">
-          <option disabled selected>
-            Free
-          </option>
+        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]" defaultValue={"free"}>
           <option>free</option>
           <option>used</option>
           <option>reserved</option>
         </select>
 
-        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]">
-          <option disabled selected>
-            newest
-          </option>
+        <select className="select select-bordered select-primary select-sm w-full border-2 md:max-w-[25%] xl:max-w-[12%]" defaultValue={"newest"}>
           <option>newest</option>
           <option>latest</option>
         </select>
