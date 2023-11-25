@@ -1,9 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
+import Link from "next/link";
 
 const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
   return (
-    <div className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 p-4 text-sm">
+    <Link
+      href={{
+        pathname: "/my-files",
+        query: { id: folder.id },
+      }}
+      className="flex h-32 flex-col gap-4 rounded-lg bg-gray-100 p-4 text-sm"
+    >
       {/* <div className="flex flex-row-reverse gap-2"></div> */}
       <div className="flex">
         <Icon
@@ -40,7 +47,7 @@ const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
         <span className=" font-bold">{folder.name}</span>
         <span className=" text-gray-500">{folder.state} files</span>
       </div>
-    </div>
+    </Link>
   );
 };
 

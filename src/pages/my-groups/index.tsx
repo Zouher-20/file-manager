@@ -1,29 +1,36 @@
 import FolderCard from "~/components/folder";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "~/components/foldersTable";
 
 const MyGroups = () => {
-  const folders: fileInterface["folders"] = [
+  const [folders, setFolders] = useState([
     { id: 1, name: "Book name aa1", state: "free", date: "22/4/2001" },
     { id: 2, name: "Book name aa1", state: "free", date: "22/4/2001" },
     { id: 3, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 4, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 5, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 6, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 7, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 8, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 9, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 10, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 11, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 12, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 13, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 14, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 15, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    // { id: 16, name: "Book name aa1", state: "free", date: "22/4/2001" },
-  ];
+  ]);
   const [vertical, setVertical] = useState("grid");
+  const [groupName, setGroupName] = useState("");
+
+  const Submit = () => {
+    // create group there
+    let obj = {
+      id: folders.length + 1,
+      name: groupName,
+      state: "free",
+      date: "22/4/2001",
+    };
+    setFolders((folders) => [...folders, obj]);
+    setGroupName("");
+  };
+
+  const onChange = ({ target: e }) => {
+    let name: string = groupName;
+    name = e.value;
+    setGroupName(name);
+  };
+  useEffect(() => {}, [folders]);
 
   return (
     <div className="flex h-[82vh] flex-col gap-1">
@@ -49,6 +56,37 @@ const MyGroups = () => {
             <Icon className="h-6 w-6 " icon={"bi:list"} />
           </div>
         </div>
+        <button
+          className="btn btn-primary btn-sm capitalize text-white"
+          onClick={() => document.getElementById("my_modal_1").showModal()}
+        >
+          Create group +
+        </button>
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="text-center text-2xl font-bold text-primary">
+              Create group
+            </h3>
+            <div className="flex flex-col gap-1 py-4">
+              <label className="mb-1 font-bold">Name</label>
+              <input
+                value={groupName}
+                onChange={(e) => onChange(e)}
+                type="text"
+                placeholder="Name"
+                className="input input-bordered input-primary w-full "
+              />
+            </div>
+            <div className="modal-action ">
+              <form method="dialog" className="flex gap-1">
+                <button className="btn">Close</button>
+                <button onClick={Submit} className="btn btn-primary text-white">
+                  submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
       <div
         className={
