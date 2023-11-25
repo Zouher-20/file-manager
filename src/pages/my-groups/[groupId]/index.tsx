@@ -4,6 +4,8 @@ import { fileInterface } from "~/pages/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import FileCard from "~/components/card";
 import Table from "~/components/table";
+import UpdateModal from "~/components/modal/update_modal";
+import DeleteModal from "~/components/modal/delete_modal";
 
 const Group = () => {
   const router = useRouter();
@@ -34,6 +36,8 @@ const Group = () => {
 
   return (
     <div className="flex h-[82vh] flex-col gap-4 pt-4">
+      <UpdateModal />
+      <DeleteModal />
       <span className=" text-2xl font-bold">
         {group.name} {router.query.groupId}
       </span>
