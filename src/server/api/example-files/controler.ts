@@ -18,3 +18,8 @@ export const createProcedure = protectedProcedure
 export const getLatestProcedure = publicProcedure.query(({ ctx }) => {
     return filesService.getLatest();
 });
+
+
+export const getHello = publicProcedure.query(() => {
+    return 'Zouhair'
+})

@@ -2,13 +2,13 @@
 import {
   createTRPCRouter,
 } from "~/server/api/trpc";
-import { createProcedure, getLatestProcedure } from './controler'
+import { createProcedure, getLatestProcedure, getHello } from './controler'
 
 const trpcRoutes = {
   create: createProcedure,
-  getLatest: getLatestProcedure
-
+  getLatest: getLatestProcedure,
+  hello: getHello,
 }
 
-export const postRouter =
+export const fileRouter =
   createTRPCRouter(trpcRoutes);
