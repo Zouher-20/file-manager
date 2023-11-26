@@ -82,6 +82,7 @@ model User {
     name          String?
     email         String?         @unique
     emailVerified DateTime?
+    password      String
     accounts      Account[]
     sessions      Session[]
     files         File[]
