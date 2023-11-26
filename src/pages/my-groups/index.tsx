@@ -2,24 +2,26 @@ import FolderCard from "~/components/folder";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useEffect, useState } from "react";
-import Table from "~/components/foldersTable";
+import Table from "~/components/table";
 import GridListComponent from "~/components/grid_list_component";
+import LeaveModal from "~/components/modal/leave-modal";
 
-const MyGroups = () => {
+const MyGroups = (props) => {
   const [folders, setFolders] = useState([
-    { id: 1, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 2, name: "Book name aa1", state: "free", date: "22/4/2001" },
-    { id: 3, name: "Book name aa1", state: "free", date: "22/4/2001" },
+    { id: 1, name: "Book name aa1", files: "15", date: "22/4/2001" },
+    { id: 2, name: "Book name aa1", files: "45", date: "22/4/2001" },
+    { id: 3, name: "Book name aa1", files: "27", date: "22/4/2001" },
   ]);
   const [vertical, setVertical] = useState("grid");
   const [groupName, setGroupName] = useState("");
+  const tableRows = ["", "Type", "Name", "files", "Date", "Actions"];
 
   const Submit = () => {
     // create group there
     let obj = {
       id: folders.length + 1,
       name: groupName,
-      state: "free",
+      files: "33",
       date: "22/4/2001",
     };
     setFolders((folders) => [...folders, obj]);
@@ -35,6 +37,7 @@ const MyGroups = () => {
 
   return (
     <div className="flex h-[82vh] flex-col gap-1">
+      <LeaveModal />
       <span className=" text-2xl font-bold">Groups (4)</span>
       <div className="mr-4 grid gap-4 sm:flex sm:flex-row-reverse">
         <GridListComponent
@@ -42,7 +45,7 @@ const MyGroups = () => {
           setVertical={(vertical: string) => setVertical(vertical)}
         />
         <button
-          className="btn btn-primary btn-sm capitalize text-white"
+          className="btn btn-primary btn-sm capitalize text-base-100"
           onClick={() => {
             const modal = document.getElementById("my_modal_1");
             if (modal !== null) {
@@ -70,7 +73,10 @@ const MyGroups = () => {
             <div className="modal-action ">
               <form method="dialog" className="flex gap-1">
                 <button className="btn">Close</button>
-                <button onClick={Submit} className="btn btn-primary text-white">
+                <button
+                  onClick={Submit}
+                  className="btn btn-primary text-base-100"
+                >
                   submit
                 </button>
               </form>
@@ -95,7 +101,10 @@ const MyGroups = () => {
             );
           })
         ) : (
-          <Table folders={folders} />
+          <Table
+            dataTable={{ rows: tableRows, cols: folders }}
+            actionType="group"
+          />
         )}
       </div>
     </div>

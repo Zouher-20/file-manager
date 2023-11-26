@@ -10,7 +10,7 @@ import DropDownCommponent from "~/components/drop_down_component";
 import FileCard from "~/components/card";
 import { useRouter } from "next/router";
 
-const MyFiles = () => {
+const MyFiles = (props) => {
   const router = useRouter();
   const id = router.query.id;
   const [vertical, setVertical] = useState("grid");
@@ -18,6 +18,7 @@ const MyFiles = () => {
     name: "",
     files: [{ id: 0, name: "", state: "", date: "" }],
   });
+  const tableRows = ["", "Type", "Name", "State", "Date", "Actions"];
 
   useEffect(() => {
     if (id) {
@@ -123,7 +124,10 @@ const MyFiles = () => {
             );
           })
         ) : (
-          <Table files={group.files} />
+          <Table
+            dataTable={{ rows: tableRows, cols: group.files }}
+            actionType="files"
+          />
         )}
       </div>
     </div>

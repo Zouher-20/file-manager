@@ -24,7 +24,7 @@ const Appbar = () => {
   return (
     <div
       className={
-        "navbar bg-primary px-8 py-0 text-white 2xl:max-w-[1360px] " +
+        "navbar bg-primary px-8 py-0 text-base-100 2xl:max-w-[1360px] " +
         styles.navbar
       }
     >

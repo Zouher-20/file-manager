@@ -22,7 +22,7 @@ function DropDownCommponent({
       </label>
       <ul
         tabIndex={0}
-        className="menu dropdown-content z-[1] w-52 w-full rounded-box bg-base-100 p-2 shadow"
+        className="menu dropdown-content z-[1] w-full rounded-box bg-base-100 p-2 shadow"
       >
         {itemList.map((item: any) => {
           return (

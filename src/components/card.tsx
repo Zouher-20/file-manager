@@ -7,7 +7,7 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg bg-gray-100 px-4 py-2 text-sm">
+    <div className="flex flex-col gap-4 rounded-lg bg-base-200 px-4 py-2 text-sm">
       <div className="flex flex-row-reverse">
         <FileDropDownComponent />
       </div>

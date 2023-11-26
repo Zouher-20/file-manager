@@ -13,7 +13,7 @@ function GridListComponent({
         onClick={() => setVertical("grid")}
         className={
           "join-item flex justify-center px-2 py-1 " +
-          (vertical === "grid" ? " bg-primary text-white" : "border")
+          (vertical === "grid" ? " bg-primary text-base-100" : "border")
         }
       >
         <Icon className="h-6 w-6" icon={"solar:widget-broken"} />
@@ -22,7 +22,7 @@ function GridListComponent({
         onClick={() => setVertical("list")}
         className={
           "join-item flex justify-center px-2 py-1 " +
-          (vertical === "list" ? " bg-primary text-white" : "border")
+          (vertical === "list" ? " bg-primary text-base-100" : "border")
         }
       >
         <Icon className="h-6 w-6 " icon={"solar:reorder-broken"} />
