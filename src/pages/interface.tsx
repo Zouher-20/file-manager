@@ -3,7 +3,13 @@ export interface fileInterface {
   file: { id: number; name: string; state: string; date: string };
 
   folders: Array<fileInterface["folder"]>;
-  folder: { id: number; name: string; files: string; date: string };
+  folder: {
+    id: number;
+    name: string;
+    files: string;
+    date: string;
+    state: number;
+  };
 
   users: Array<fileInterface["user"]>;
   user: { name: string; id: number; email: string };
