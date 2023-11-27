@@ -103,7 +103,11 @@ const MyFiles = (props) => {
               >
                 <Icon className="h-8 w-8" icon={"solar:user-broken"} />
               </button>
-              <button className="btn btn-square btn-outline btn-primary mx-3">
+              <button
+                title="add-folder"
+                type="button"
+                className="btn btn-square btn-outline btn-primary mx-3"
+              >
                 <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
               </button>
             </div>
@@ -112,9 +116,8 @@ const MyFiles = (props) => {
         <div
           className={
             "grid overflow-x-hidden  py-4 " +
-            (vertical === "grid"
-              ? "grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5"
-              : "")
+            (vertical === "grid" &&
+              "grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5")
           }
         >
           {vertical === "grid" ? (

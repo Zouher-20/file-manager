@@ -24,9 +24,9 @@ function DropDownCommponent({
         tabIndex={0}
         className="menu dropdown-content z-[1] w-full rounded-box bg-base-100 p-2 shadow"
       >
-        {itemList.map((item: any) => {
+        {itemList.map((item: any, index: number) => {
           return (
-            <li>
+            <li key={index}>
               <a>{item}</a>
             </li>
           );
