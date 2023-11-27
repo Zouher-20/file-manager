@@ -8,5 +8,8 @@ export interface fileInterface {
   users: Array<fileInterface["user"]>;
   user: { name: string; id: number; email: string };
 
-  table: { rows: Array<string>; cols: fileInterface["files"] };
+  table: {
+    rows: Array<string>;
+    cols: fileInterface["files"] | fileInterface["folder"];
+  };
 }

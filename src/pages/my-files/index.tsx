@@ -11,7 +11,7 @@ import FileCard from "~/components/card";
 import { useRouter } from "next/router";
 import { MainLayout } from "~/components/MainLayout";
 
-const MyFiles = (props) => {
+const MyFiles = () => {
   const router = useRouter();
   const id = router.query.id;
   const [vertical, setVertical] = useState("grid");
@@ -97,7 +97,8 @@ const MyFiles = (props) => {
                   if (modal !== null) {
                     /// todo : send file to redux
                     // dispatch({ type: LOAD_MODAL_DATA, file });
-                    modal.showModal();
+
+                    (modal as unknown as { showModal: () => void }).showModal();
                   }
                 }}
               >

@@ -1,14 +1,14 @@
 import FolderCard from "~/components/folder";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Table from "~/components/table";
 import GridListComponent from "~/components/grid_list_component";
 import LeaveModal from "~/components/modal/leave-modal";
 import { MainLayout } from "~/components/MainLayout";
 
-const MyGroups = (props) => {
-  const [folders, setFolders] = useState([
+const MyGroups = () => {
+  const [folders, setFolders] = useState<Array<fileInterface["folder"]>>([
     { id: 1, name: "Book name aa1", files: "15", date: "22/4/2001" },
     { id: 2, name: "Book name aa1", files: "45", date: "22/4/2001" },
     { id: 3, name: "Book name aa1", files: "27", date: "22/4/2001" },
@@ -29,9 +29,9 @@ const MyGroups = (props) => {
     setGroupName("");
   };
 
-  const onChange = ({ target: e }) => {
+  const onChange = (e: ChangeEvent) => {
     let name: string = groupName;
-    name = e.value;
+    name = (e.target as HTMLInputElement).value;
     setGroupName(name);
   };
   useEffect(() => {}, [folders]);
