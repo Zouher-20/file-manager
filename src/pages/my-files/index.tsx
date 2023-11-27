@@ -9,8 +9,9 @@ import GridListComponent from "~/components/grid_list_component";
 import DropDownCommponent from "~/components/drop_down_component";
 import FileCard from "~/components/card";
 import { useRouter } from "next/router";
+import { MainLayout } from "~/components/MainLayout";
 
-const MyFiles = () => {
+const MyFiles = (props) => {
   const router = useRouter();
   const id = router.query.id;
   const [vertical, setVertical] = useState("grid");
@@ -18,6 +19,7 @@ const MyFiles = () => {
     name: "",
     files: [{ id: 0, name: "", state: "", date: "" }],
   });
+  const tableRows = ["", "Type", "Name", "State", "Date", "Actions"];
 
   useEffect(() => {
     if (id) {
@@ -62,71 +64,76 @@ const MyFiles = () => {
   }, []);
 
   return (
-    <div className="flex h-[82vh] flex-col gap-1">
-      <AddNewUserModal />
-      <UpdateModal />
-      <DeleteModal />
-      <span className=" text-2xl font-bold">
-        {id ? group.name : "All Files"} {id}
-      </span>
-      <div className="my-2 mr-4 grid items-center gap-4 sm:flex sm:flex-row-reverse">
-        <GridListComponent
-          vertical={vertical}
-          setVertical={(vertical: string) => setVertical(vertical)}
-        />
-        <DropDownCommponent
-          defaultValue={"newest"}
-          itemList={["newest", "latest"]}
-          listName="Order by"
-        />
-        <DropDownCommponent
-          defaultValue={"free"}
-          itemList={["free", "used", "reserved"]}
-          listName="Status"
-        />
+    <MainLayout>
+      <div className="flex  flex-col gap-1">
+        <AddNewUserModal />
+        <UpdateModal />
+        <DeleteModal />
+        <span className=" text-2xl font-bold">
+          {id ? group.name : "All Files"} {id}
+        </span>
+        <div className="my-2 mr-4 grid items-center gap-4 sm:flex sm:flex-row-reverse">
+          <GridListComponent
+            vertical={vertical}
+            setVertical={(vertical: string) => setVertical(vertical)}
+          />
+          <DropDownCommponent
+            defaultValue={"newest"}
+            itemList={["newest", "latest"]}
+            listName="Order by"
+          />
+          <DropDownCommponent
+            defaultValue={"free"}
+            itemList={["free", "used", "reserved"]}
+            listName="Status"
+          />
 
-        {id && (
-          <div className="flex w-full max-sm:justify-center">
-            <button
-              className="btn btn-square btn-outline btn-primary "
-              onClick={() => {
-                const modal = document.getElementById("add_user_modal");
-                if (modal !== null) {
-                  /// todo : send file to redux
-                  // dispatch({ type: LOAD_MODAL_DATA, file });
-                  modal.showModal();
-                }
-              }}
-            >
-              <Icon className="h-8 w-8" icon={"solar:user-broken"} />
-            </button>
-            <button className="btn btn-square btn-outline btn-primary mx-3">
-              <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
-            </button>
-          </div>
-        )}
+          {id && (
+            <div className="flex w-full max-sm:justify-center">
+              <button
+                className="btn btn-square btn-outline btn-primary "
+                onClick={() => {
+                  const modal = document.getElementById("add_user_modal");
+                  if (modal !== null) {
+                    /// todo : send file to redux
+                    // dispatch({ type: LOAD_MODAL_DATA, file });
+                    modal.showModal();
+                  }
+                }}
+              >
+                <Icon className="h-8 w-8" icon={"solar:user-broken"} />
+              </button>
+              <button className="btn btn-square btn-outline btn-primary mx-3">
+                <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
+              </button>
+            </div>
+          )}
+        </div>
+        <div
+          className={
+            "grid overflow-x-hidden  py-4 " +
+            (vertical === "grid"
+              ? "grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5"
+              : "")
+          }
+        >
+          {vertical === "grid" ? (
+            group.files.map((file: fileInterface["file"]) => {
+              return (
+                <div key={file.id}>
+                  <FileCard card={file} />
+                </div>
+              );
+            })
+          ) : (
+            <Table
+              dataTable={{ rows: tableRows, cols: group.files }}
+              actionType="files"
+            />
+          )}
+        </div>
       </div>
-      <div
-        className={
-          "xs:overflow-x-hidden xs:px-12 grid py-4 " +
-          (vertical === "grid"
-            ? "gap-4 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-5"
-            : "")
-        }
-      >
-        {vertical === "grid" ? (
-          group.files.map((file: fileInterface["file"]) => {
-            return (
-              <div key={file.id}>
-                <FileCard card={file} />
-              </div>
-            );
-          })
-        ) : (
-          <Table files={group.files} />
-        )}
-      </div>
-    </div>
+    </MainLayout>
   );
 };
 
