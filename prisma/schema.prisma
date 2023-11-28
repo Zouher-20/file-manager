@@ -22,9 +22,10 @@ model File {
     updatedAt DateTime @updatedAt
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
-    status      Boolean
+    status      String
     group   Group @relation(fields: [groupId], references: [id])
     groupId Int
+    name    String
 
     @@index([id])
 }
