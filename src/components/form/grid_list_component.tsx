@@ -8,7 +8,7 @@ function GridListComponent({
   setVertical: Function;
 }) {
   return (
-    <div className="join join-vertical lg:join-horizontal hover:cursor-pointer">
+    <div className="join join-vertical sm:join-horizontal hover:cursor-pointer">
       <div
         onClick={() => setVertical("grid")}
         className={

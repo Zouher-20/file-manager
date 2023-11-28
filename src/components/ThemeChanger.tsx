@@ -5,7 +5,7 @@ export function ThemeChanger() {
   const { theme, setTheme } = useTheme();
   function onChange(event: ChangeEvent): void {
     if ((event.target as HTMLInputElement).checked) setTheme("light");
-    else setTheme("dim");
+    else setTheme("dark");
   }
   return (
     <>

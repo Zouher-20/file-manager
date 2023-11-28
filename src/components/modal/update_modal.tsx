@@ -33,7 +33,7 @@ export default connect(mapStateToProps)(UpdateModal);
 function DetailsModal({ onSwap }: { onSwap: any }) {
   return (
     <>
-      <h3 className="text-lg font-bold">File Details</h3>
+      <h3 className="text-xl text-primary font-bold">File Details</h3>
       <div className="grid grid-cols-1 divide-y">
         <DataSectionComponenet name={"Name"} data={"majd"} />
         <DataSectionComponenet name={"Date Added"} data={"20/2/2023"} />
@@ -61,7 +61,7 @@ function EditModal({ onSwap }: { onSwap: any }) {
         >
           <Icon className="h-4 w-4 " icon={"eva:arrow-ios-back-outline"} />
         </button>
-        <h3 className="mt-4 text-lg font-bold">Update File</h3>
+        <h3 className="mt-4 text-xl text-primary font-bold">Update File</h3>
         <div className="grid grid-cols-1 divide-y">
           <DataSectionComponenet name={"Name"} data={"majd"} />
           <DataSectionComponenet name={"Date Added"} data={"20/2/2023"} />
@@ -97,7 +97,7 @@ function DescriptionSection(props: any) {
           <textarea
             className="textarea textarea-ghost textarea-lg h-60"
             placeholder="Bio"
-            value={description}
+            defaultValue={description}
           ></textarea>
         ) : (
           <div className="card-body">

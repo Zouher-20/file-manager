@@ -4,7 +4,7 @@ import type {
 } from "next";
 import { getCsrfToken } from "next-auth/react";
 import Link from "next/link";
-import { AuthLayout } from "~/components/AuthLayout";
+import { AuthLayout } from "~/components/layout/AuthLayout";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 

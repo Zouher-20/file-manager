@@ -10,6 +10,6 @@ export interface fileInterface {
 
   table: {
     rows: Array<string>;
-    cols: fileInterface["files"] | fileInterface["folder"];
+    cols: fileInterface["files"] | fileInterface["folders"];
   };
 }

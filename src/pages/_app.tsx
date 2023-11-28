@@ -6,7 +6,6 @@ import { Exo_2 } from "next/font/google";
 export const exo = Exo_2({ subsets: ["latin"], weight: ["500", "300", "700"] });
 import "~/styles/globals.css";
 import { ThemeProvider } from "next-themes";
-import Appbar from "~/components/appbar";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";

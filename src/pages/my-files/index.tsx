@@ -1,15 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState, useEffect } from "react";
-import Table from "~/components/table";
+import Table from "~/components/form/table";
 import UpdateModal from "~/components/modal/update_modal";
 import DeleteModal from "~/components/modal/delete_modal";
 import AddNewUserModal from "./../../components/modal/add_users_modal";
-import GridListComponent from "~/components/grid_list_component";
-import DropDownCommponent from "~/components/drop_down_component";
-import FileCard from "~/components/card";
+import GridListComponent from "~/components/form/grid_list_component";
+import DropDownCommponent from "~/components/form/drop_down_component";
+import FileCard from "~/components/cards/file";
 import { useRouter } from "next/router";
-import { MainLayout } from "~/components/MainLayout";
+import { MainLayout } from "~/components/layout/MainLayout";
+import AddFileModal from "~/components/modal/add_file_modal";
 
 const MyFiles = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const MyFiles = () => {
     name: "",
     files: [{ id: 0, name: "", state: "", date: "" }],
   });
-  const tableRows = ["", "Type", "Name", "State", "Date", "Actions"];
+  const tableRows = ["", "Name", "State", "Date", "Actions"];
 
   useEffect(() => {
     if (id) {
@@ -63,13 +64,20 @@ const MyFiles = () => {
     }
   }, []);
 
+  const openModal = (modalName: string) => {
+    const modal = document.getElementById(modalName);
+    if (modal !== null) {
+      (modal as unknown as { showModal: () => void }).showModal();
+    }
+  };
   return (
     <MainLayout>
-      <div className="flex  flex-col gap-1">
+      <div className="flex flex-col gap-2">
         <AddNewUserModal />
         <UpdateModal />
         <DeleteModal />
-        <span className=" text-2xl font-bold">
+        <AddFileModal />
+        <span className=" text-3xl font-bold">
           {id ? group.name : "All Files"} {id}
         </span>
         <div className="my-2 mr-4 grid items-center gap-4 sm:flex sm:flex-row-reverse">
@@ -89,36 +97,29 @@ const MyFiles = () => {
           />
 
           {id && (
-            <div className="flex w-full max-sm:justify-center">
+            <div className="flex w-full gap-2 max-sm:justify-center">
               <button
-                className="btn btn-square btn-outline btn-primary "
-                onClick={() => {
-                  const modal = document.getElementById("add_user_modal");
-                  if (modal !== null) {
-                    /// todo : send file to redux
-                    // dispatch({ type: LOAD_MODAL_DATA, file });
-
-                    (modal as unknown as { showModal: () => void }).showModal();
-                  }
-                }}
+                className="btn btn-square btn-outline btn-primary btn-sm "
+                onClick={() => openModal("add_user_modal")}
               >
-                <Icon className="h-8 w-8" icon={"solar:user-broken"} />
+                <Icon className="h-6 w-6" icon={"solar:user-broken"} />
               </button>
               <button
                 title="add-folder"
                 type="button"
-                className="btn btn-square btn-outline btn-primary mx-3"
+                className="btn btn-square btn-outline btn-primary btn-sm"
+                onClick={() => openModal("add_file_modal")}
               >
-                <Icon className="h-8 w-8" icon={"solar:add-folder-broken"} />
+                <Icon className="h-6 w-6" icon={"solar:add-folder-broken"} />
               </button>
             </div>
           )}
         </div>
         <div
           className={
-            "grid overflow-x-hidden  py-4 " +
+            "grid overflow-x-hidden py-4 " +
             (vertical === "grid" &&
-              "grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5")
+              "gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5")
           }
         >
           {vertical === "grid" ? (
