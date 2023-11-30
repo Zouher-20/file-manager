@@ -11,11 +11,11 @@ function DropDownCommponent({
 }) {
   return (
     <div className="dropdown">
-      <label tabIndex={0} className="btn m-1 w-full">
+      <label tabIndex={0} className="btn btn-sm  w-full">
         <div className="flex items-center">
-          <p className="m-3 w-32">{listName}</p>
+          <p className=" w-32">{listName}</p>
           <Icon
-            className="h-4 w-4 "
+            className="h-4 w-4  "
             icon={"solar:alt-arrow-down-bold-duotone"}
           />
         </div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FormEventHandler } from "react";
-import { AuthLayout } from "~/components/AuthLayout";
+import { AuthLayout } from "~/components/layout/AuthLayout";
 import { api } from "~/utils/api";
 export default function Signup() {
   const { isLoading, mutateAsync } = api.user.create.useMutation();
