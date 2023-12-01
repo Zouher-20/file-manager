@@ -2,6 +2,8 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import { getServerSession } from "next-auth/next";
+
 import { getCsrfToken } from "next-auth/react";
 import Link from "next/link";
 import { AuthLayout } from "~/components/layout/AuthLayout";
@@ -92,11 +94,9 @@ export default function SignIn({
     </AuthLayout>
   );
 }
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const csrfToken = await getCsrfToken(context);
   return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
+    props: { csrfToken },
   };
 }

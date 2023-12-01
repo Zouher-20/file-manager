@@ -1,4 +1,4 @@
-import { fileRouter } from "~/server/api/example-files/router";
+import { fileRouter } from "~/server/api/file-manager/router";
 import { userRouter } from "~/server/api/users/router";
 
 import { createTRPCRouter } from "~/server/api/trpc";

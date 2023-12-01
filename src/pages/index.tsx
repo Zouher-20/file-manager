@@ -6,8 +6,10 @@ import GridListComponent from "~/components/form/grid_list_component";
 import LeaveModal from "~/components/modal/leave-modal";
 import { MainLayout } from "~/components/layout/MainLayout";
 import Add_group_modal from "~/components/modal/add_group_modal";
+import { useSession } from "next-auth/react";
+import { api } from "~/utils/api";
 
-const MyGroups = (props) => {
+const MyGroups = () => {
   const [folders, setFolders] = useState<Array<fileInterface["folder"]>>([
     { id: 1, name: "Book name aa1", files: "15", date: "22/4/2001" },
     { id: 2, name: "Book name aa1", files: "45", date: "22/4/2001" },
@@ -17,7 +19,6 @@ const MyGroups = (props) => {
   ]);
   const [vertical, setVertical] = useState("grid");
   const tableRows = ["", "Name", "files", "Date", "Actions"];
-
   const Submit = (groupName: string) => {
     // create group there
     let obj = {
@@ -34,8 +35,9 @@ const MyGroups = (props) => {
       (modal as unknown as { showModal: () => void }).showModal();
     }
   };
+  // api.file.getAllGroup.useQuery({ page: 1, pageSize: 10 });
 
-  useEffect(() => { }, [folders]);
+  useEffect(() => {}, [folders]);
 
   return (
     <MainLayout>

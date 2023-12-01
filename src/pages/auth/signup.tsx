@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FormEventHandler } from "react";
 import { AuthLayout } from "~/components/layout/AuthLayout";
 import { api } from "~/utils/api";
+import { signIn } from "next-auth/react";
 export default function Signup() {
   const { isLoading, mutateAsync } = api.user.create.useMutation();
 
@@ -14,7 +15,17 @@ export default function Signup() {
       password: formData.get("password")?.toString() || "",
       confirmPassword: formData.get("confirmPassword")?.toString() || "",
     }).then((res) => {
-      console.log(res);
+      const name = res.name;
+      const password = res.password;
+      const email = res.email;
+      /// fix this code it must work like that but i cant find where the problem
+      /// add if function to check if registeration goes well or not
+      // signIn("Credentials", {
+      //   username: name,
+      //   password: password,
+      //   email: email,
+      //   redirect: false,
+      // });
     });
   };
 
