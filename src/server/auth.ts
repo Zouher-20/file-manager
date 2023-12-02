@@ -42,6 +42,9 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -52,7 +55,7 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db),
   session: {
-
+     strategy : 'jwt'
   },
   providers: [
     /**
@@ -72,7 +75,7 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "email", type: "email" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
@@ -104,6 +107,9 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+  jwt: {
+    secret: env.NEXTAUTH_SECRET,
+  },
 };
 
 /**

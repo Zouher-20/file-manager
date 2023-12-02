@@ -2,16 +2,26 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken, useSession } from "next-auth/react";
 import Link from "next/link";
 import { AuthLayout } from "~/components/layout/AuthLayout";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
-
+import { FormEventHandler, useMemo } from "react";
+import { signIn } from "next-auth/react";
 export default function SignIn({
   csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const {data : session} = useSession()
+  const handleSubmit: FormEventHandler = (e) => {
+    e.preventDefault();
+    const loginForm = new FormData(e.target as HTMLFormElement);
+    signIn("credentials", {
+      email: loginForm.get("email"),
+      password: loginForm.get("password"),
+      csrfToken: loginForm.get("csrfToken"),
+    })
+  };
 
   const errorMessage = useMemo(() => {
     if (router.query.error === "CredentialsSignin")
@@ -21,9 +31,9 @@ export default function SignIn({
 
   return (
     <AuthLayout>
-      <form method="post" action="/api/auth/callback/credentials">
+      <form onSubmit={handleSubmit}>
         <h3 className="mb-6 text-3xl">Welcome Back 👋</h3>
-
+         {`${session}`}
         {/* Alert for error */}
         {errorMessage && (
           <div
