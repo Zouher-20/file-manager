@@ -1,16 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState, useEffect } from "react";
-import Table from "~/components/form/table";
-import UpdateModal from "~/components/modal/update_modal";
-import DeleteModal from "~/components/modal/delete_modal";
-import AddNewUserModal from "./../../components/modal/add_users_modal";
-import GridListComponent from "~/components/form/grid_list_component";
-import DropDownCommponent from "~/components/form/drop_down_component";
-import FileCard from "~/components/cards/file";
+import Table from "~/components/form/Table";
+import UpdateModal from "~/components/modal/UpdateModal";
+import DeleteModal from "~/components/modal/DeleteModal";
+import AddNewUserModal from "../../components/modal/AddUsersModal";
+import GridListComponent from "~/components/form/GridList";
+import DropDownCommponent from "~/components/form/Dropdown";
+import FileCard from "~/components/cards/File";
 import { useRouter } from "next/router";
 import { MainLayout } from "~/components/layout/MainLayout";
-import AddFileModal from "~/components/modal/add_file_modal";
+import AddFileModal from "~/components/modal/AddFileModal";
 
 const MyFiles = () => {
   const router = useRouter();

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { FormEventHandler } from "react";
 import { AuthLayout } from "~/components/layout/AuthLayout";
 import { api } from "~/utils/api";
-import { signIn } from "next-auth/react";
 export default function Signup() {
   const { isLoading, mutateAsync } = api.user.create.useMutation();
 
@@ -15,17 +14,7 @@ export default function Signup() {
       password: formData.get("password")?.toString() || "",
       confirmPassword: formData.get("confirmPassword")?.toString() || "",
     }).then((res) => {
-      const name = res.name;
-      const password = res.password;
-      const email = res.email;
-      /// fix this code it must work like that but i cant find where the problem
-      /// add if function to check if registeration goes well or not
-      // signIn("Credentials", {
-      //   username: name,
-      //   password: password,
-      //   email: email,
-      //   redirect: false,
-      // });
+      console.log(res);
     });
   };
 
@@ -95,9 +84,9 @@ export default function Signup() {
         </button>
 
         <div className="mb-3 mt-5 text-center">
-          Already has an account?{" "}
-          <Link href="/auth/signin" className="link-hover link-primary link">
-            signin
+          Already has an account?<br/>
+          <Link href="/auth/signin" className="link-hover link-primary link font-bold">
+            Signin
           </Link>
         </div>
       </form>

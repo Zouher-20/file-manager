@@ -84,10 +84,10 @@ export default function SignIn({
           Signin
         </button>
 
-        <div className="mb-3 mt-5">
-          New to file-manager?{" "}
-          <Link href="/auth/signup" className="link-hover link-primary link">
-            create new account
+        <div className="mb-3 mt-5 text-center">
+          New to file-manager?<br/>
+          <Link href="/auth/signup" className="link-hover link-primary link font-bold">
+            Create an account
           </Link>
         </div>
       </form>

@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRef, useState } from "react";
 import { connect } from "react-redux";
-import SearchFeild from "../form/search_field";
+import SearchFeild from "../form/SearchField";
 
 const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,

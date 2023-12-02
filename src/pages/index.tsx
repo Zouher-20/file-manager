@@ -1,11 +1,11 @@
-import FolderCard from "~/components/cards/folder";
+import FolderCard from "~/components/cards/Folder";
 import { fileInterface } from "./interface";
 import { ChangeEvent, useEffect, useState } from "react";
-import Table from "~/components/form/table";
-import GridListComponent from "~/components/form/grid_list_component";
-import LeaveModal from "~/components/modal/leave-modal";
+import Table from "~/components/form/Table";
+import GridListComponent from "~/components/form/GridList";
+import LeaveModal from "~/components/modal/LeaveModal";
 import { MainLayout } from "~/components/layout/MainLayout";
-import Add_group_modal from "~/components/modal/add_group_modal";
+import Add_group_modal from "~/components/modal/AddGroupModal";
 import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 

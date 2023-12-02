@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import Appbar from "./appbar";
+import Appbar from "./Appbar";
 
 export function MainLayout({ children }: PropsWithChildren) {
   return (

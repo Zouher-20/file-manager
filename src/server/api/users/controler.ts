@@ -1,16 +1,17 @@
-import { protectedProcedure, publicProcedure } from "../trpc";
+import { publicProcedure } from "../trpc";
 import { createUserValidator } from "./validators";
 import { UserService } from "./service";
-
+import bcrypt from 'bcryptjs'
 const userService = new UserService();
 
 export const createUserProcedure = publicProcedure
   .input(createUserValidator)
-  .mutation(async ({ ctx, input }) => {
+  .mutation(async ({ input }) => {
+    const hashedPassword = await bcrypt.hash(input.password , 8)
     const toAdd = {
       name: input.name,
       email: input.email,
-      password: input.password,
+      password: hashedPassword,
     };
 
     return userService.create(toAdd);
