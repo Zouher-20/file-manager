@@ -11,15 +11,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-        email: {
-          label: "Email",
-          type: "email",
-        },
-      },
-      async authorize(credentials, req) {
+      // @ts-ignore
+      authorize: async (credentials , req) => {
         const user = await db.user.findUnique({
           where: {
             email: credentials?.email,

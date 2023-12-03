@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-import { createUserProcedure } from "./controler";
+import { createUserProcedure } from "./controller";
 
 const trpcRoutes = {
   create: createUserProcedure,

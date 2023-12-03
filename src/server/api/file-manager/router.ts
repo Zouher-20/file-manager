@@ -2,7 +2,7 @@
 import {
   createTRPCRouter,
 } from "~/server/api/trpc";
-import {exitGroup,getAllGroup,getAllFileInGroup, getAllFileInAllGroup ,searchUser,addNewFile,deleteMyFiles, createGroup,sendRequset,resposeToJoin,editFile,filterFileByCreatedAt,filterFileByStatus} from './controler'
+import {exitGroup,getAllGroup,getAllFileInGroup, getAllFileInAllGroup ,searchUser,addNewFile,deleteMyFiles, createGroup,sendRequset,resposeToJoin,editFile,filterFileByCreatedAt,filterFileByStatus} from './controller'
 
 const trpcRoutes = {
   getAllGroup:getAllGroup,
