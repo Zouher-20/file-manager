@@ -1,33 +1,23 @@
 import FolderCard from "~/components/cards/Folder";
 import { fileInterface } from "./interface";
 import { ChangeEvent, useEffect, useState } from "react";
-import Table from "~/components/form/Table";
+import Table from "~/components/view/Table";
 import GridListComponent from "~/components/form/GridList";
 import LeaveModal from "~/components/modal/LeaveModal";
 import { MainLayout } from "~/components/layout/MainLayout";
 import Add_group_modal from "~/components/modal/AddGroupModal";
 import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-
+import {Group} from '@prisma/client'
 const MyGroups = () => {
-  const [folders, setFolders] = useState<Array<fileInterface["folder"]>>([
-    { id: 1, name: "Book name aa1", files: "15", date: "22/4/2001" },
-    { id: 2, name: "Book name aa1", files: "45", date: "22/4/2001" },
-    { id: 3, name: "Book name aa1", files: "27", date: "22/4/2001" },
-    { id: 4, name: "Book name aa1", files: "27", date: "22/4/2001" },
-    { id: 5, name: "Book name aa1", files: "27", date: "22/4/2001" },
-  ]);
+
+  const {data , isLoading} = api.file.getAllGroup.useQuery({})
+
   const [vertical, setVertical] = useState("grid");
   const tableRows = ["", "Name", "files", "Date", "Actions"];
   const Submit = (groupName: string) => {
     // create group there
-    let obj = {
-      id: folders.length + 1,
-      name: groupName,
-      files: "33",
-      date: "22/4/2001",
-    };
-    setFolders((folders) => [...folders, obj]);
+
   };
   const openModal = (modalName: string) => {
     const modal = document.getElementById(modalName);
@@ -35,9 +25,6 @@ const MyGroups = () => {
       (modal as unknown as { showModal: () => void }).showModal();
     }
   };
-  // api.file.getAllGroup.useQuery({ page: 1, pageSize: 10 });
-
-  useEffect(() => {}, [folders]);
 
   return (
     <MainLayout>
@@ -57,7 +44,7 @@ const MyGroups = () => {
             Create group +
           </button>
         </div>
-        <div
+        {data && <div
           className={
             "xs:overflow-x-hidden xs:px-12 grid overflow-y-auto py-4 " +
             (vertical === "grid" &&
@@ -65,7 +52,7 @@ const MyGroups = () => {
           }
         >
           {vertical === "grid" ? (
-            folders.map((folder: fileInterface["folder"]) => {
+            data?.map((folder : Group) => {
               return (
                 <div key={folder.id}>
                   <FolderCard folder={folder} />
@@ -74,11 +61,11 @@ const MyGroups = () => {
             })
           ) : (
             <Table
-              dataTable={{ rows: tableRows, cols: folders }}
+              dataTable={{ rows: tableRows, cols: data }}
               actionType="group"
             />
           )}
-        </div>
+        </div>}
       </div>
     </MainLayout>
   );

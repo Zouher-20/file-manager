@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "../interface";
 import { useState, useEffect } from "react";
-import Table from "~/components/form/Table";
+import Table from "~/components/view/Table";
 import UpdateModal from "~/components/modal/UpdateModal";
 import DeleteModal from "~/components/modal/DeleteModal";
 import AddNewUserModal from "../../components/modal/AddUsersModal";

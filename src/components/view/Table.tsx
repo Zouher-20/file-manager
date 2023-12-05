@@ -1,6 +1,6 @@
-import { fileInterface } from "~/pages/interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/router";
+import { Group , File } from "@prisma/client";
 
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -13,15 +13,15 @@ const Table = ({
   dataTable,
   actionType,
 }: {
-  dataTable: fileInterface["table"];
+  dataTable: {rows : File[] | Group[] , cols : unknown }
   actionType: string;
 }) => {
   return (
     <table className="table table-zebra table-sm">
       <thead className="bg-primary text-white">
         <tr>
-          {dataTable["rows"].map((row: string, index: number) => {
-            return <th key={index}>{row}</th>;
+          {dataTable["rows"].map((row: File | Group, index: number) => {
+            return <th key={index}>{row.name}</th>;
           })}
         </tr>
       </thead>

@@ -15,7 +15,7 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
   return (
     <div className="flex flex-col gap-4 rounded-lg bg-base-200 px-4 py-2 text-sm">
       <div className="flex flex-row-reverse">
-        <FileDropDownComponent />
+        <FileDropDown />
       </div>
       <div className="mb-auto flex justify-center">
         <Icon className="h-12 w-12 text-gray-500" icon={"ci:file-blank"} />
@@ -32,7 +32,7 @@ const FileCard = ({ card }: { card: fileInterface["file"] }) => {
 };
 
 export default FileCard;
-function FileDropDownComponent() {
+function FileDropDown() {
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0}>

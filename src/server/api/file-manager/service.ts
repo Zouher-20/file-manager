@@ -5,8 +5,8 @@ import fs from 'fs'
 
 export class FilesService {
 
-//TODO this for get all MyGroups  with users With count of files
-  async getAllGroups (idUser: string, page: number, pageSize: number) {
+  //TODO this for get all MyGroups  with users With count of files
+  async getAllGroups(idUser: string, page: number, pageSize: number) {
     const skip = (page - 1) * pageSize
     const take = pageSize
 
@@ -14,37 +14,20 @@ export class FilesService {
       where: {
         userId: idUser
       },
-      include: {
-        group: true,
-        user: true
-      },
-      skip,
-      take
     })
-    const groups = await Promise.all(
-      userGroups.map(async userGroup => {
-        const filesCount = await db.file.count({
-          where: {
-            groupId: userGroup.group.id
-          }
-        })
 
-        return {
-          ...userGroup,
-          group: {
-            ...userGroup.group,
-            filesCount
-          }
+    const groupsIds = userGroups.map(el => el.id)
+    const result = await db.group.findMany({
+      where: {
+        id: {
+          in: groupsIds
         }
-      })
-    )
-
-    return {
-      groups
-    }
+      }
+    }) || []
+    return result
   }
-// TODO this for get all File Ingroup 
-  async getAllFileInGroup (
+  // TODO this for get all File Ingroup 
+  async getAllFileInGroup(
     userId: string,
     page: number,
     pageSize: number,
@@ -75,11 +58,10 @@ export class FilesService {
       files
     }
   }
-  //TODO for add new group
-  async addNewGroup (groupName: string, userId: string) {
+  async addNewGroup(groupName: string, userId: string) {
     const newGroup = await db.group.create({
       data: {
-        path: groupName
+        name: groupName
       }
     })
     // Link the user to the group
@@ -96,10 +78,10 @@ export class FilesService {
     })
   }
   //TODO this for AddNew file and Create Upload in public Folder
-  async addNewFile (
+  async addNewFile(
     groupId: number,
     userId: string,
-    fileName :string,
+    fileName: string,
     file: File
   ) {
     const userInGroup = await db.usersOnGroups.findFirst({
@@ -110,11 +92,11 @@ export class FilesService {
       }
     })
     if (userInGroup) {
-      this.saveFile(file,fileName)
+      this.saveFile(file, fileName)
       const newFile = await db.file.create({
         data: {
           path: `./public/${fileName}.Txt`,
-          name:fileName,
+          name: fileName,
           createdBy: {
             connect: { id: userId }
           },
@@ -136,11 +118,11 @@ export class FilesService {
     fs.writeFileSync(`./public/${fileName}.Txt`, data);
     fs.unlinkSync(file.webkitRelativePath);
     return;
-}
+  }
 
 
   //TODO this for edite file and reupload
-  async editFile(userId: string, fileId: number, state: boolean, file: File ,fileName:string ) {
+  async editFile(userId: string, fileId: number, state: boolean, file: File, fileName: string) {
     if (state) {
       await db.$transaction(async (prisma) => {
         const existingFile = await prisma.file.findUnique({
@@ -156,30 +138,30 @@ export class FilesService {
         if (!userInGroup) {
           throw new Error('User is not in the group with status: true');
         }
-  
+
         if (existingFile.status !== userId) {
           throw new Error('File is currently being edited by another user');
         }
-  
+
         // Lock the file for editing by setting the status to the user ID
         await prisma.file.update({
           where: { id: fileId },
           data: { status: userId },
         });
-  
-         this.saveFile(file,fileName);
+
+        this.saveFile(file, fileName);
       });
     } else {
       await db.file.update({
         where: { id: fileId },
-        data: { status: "-1" }, 
+        data: { status: "-1" },
       });
     }
-  
+
     console.log('File edited successfully');
   }
   //TODO this for search user
-  async searchUser (
+  async searchUser(
     name: string,
     email: string,
     page: number,
@@ -206,7 +188,7 @@ export class FilesService {
     return users
   }
   //TODO this for send requset to join group
-  async sendRequset (userId: string, receiverId: string, groupId: number) {
+  async sendRequset(userId: string, receiverId: string, groupId: number) {
     const userInGroup = await db.usersOnGroups.findFirst({
       where: {
         userId: userId,
@@ -244,7 +226,7 @@ export class FilesService {
     })
   }
   //TODO this for receive requset  to join group
-  async respose (userId: string, groupId: number, state: boolean) {
+  async respose(userId: string, groupId: number, state: boolean) {
     const pendingRequest = await db.usersOnGroups.findFirst({
       where: {
         userId,
@@ -274,7 +256,7 @@ export class FilesService {
     }
   }
   //TODO this for exit in my group
-  async exitGroup (userId: string, groupId: number) {
+  async exitGroup(userId: string, groupId: number) {
     const exit = await db.usersOnGroups.findFirst({
       where: {
         userId,
@@ -293,7 +275,7 @@ export class FilesService {
     })
   }
   //TODO this for  get file in all My groups
-  async getAllFileInAllgroup (userId: string, page: number, pageSize: number) {
+  async getAllFileInAllgroup(userId: string, page: number, pageSize: number) {
     const files = await db.usersOnGroups.findMany({
       where: {
         userId: userId,
@@ -313,7 +295,7 @@ export class FilesService {
     return files
   }
   //TODO this for delete my File 
-  async deleteMyFile (userId: string, fileId: number) {
+  async deleteMyFile(userId: string, fileId: number) {
     await db.file.delete({
       where: {
         createdById: userId,
@@ -322,7 +304,7 @@ export class FilesService {
     })
   }
   //TODO this for all files for free or for not free
-  async filterFileByStatus (
+  async filterFileByStatus(
     groupId: number,
     status: string,
     page: number,
@@ -340,7 +322,7 @@ export class FilesService {
     return files
   }
   //TODO this for get all files for created by asc or desc
-  async filterFileByCreatedAt (
+  async filterFileByCreatedAt(
     groupId: number,
     createdAt: boolean,
     page: number,

@@ -1,9 +1,10 @@
-import { protectedProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
 import { searchValidator, addNewFileValidator, exitGroupVailedator, getAllFileInGroupVailedator, deleteMyFileVailedator, sendRequsetValidator, filterFilestatusVailedator, filterFileByCreatedAtVailedator, creatNewGroupValidator, getAllGroupsVailedator, responseValidator, editFileValidator } from "./validators";
 import { FilesService } from "./service";
 
 
 const filesService = new FilesService();
+
 
 export const searchUser = protectedProcedure
   .input(searchValidator)
@@ -16,7 +17,8 @@ export const searchUser = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const sendRequset = protectedProcedure
+
+  export const sendRequset = protectedProcedure
   .input(sendRequsetValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -27,7 +29,8 @@ export const sendRequset = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const getAllGroup = protectedProcedure
+
+  export const getAllGroup = protectedProcedure
   .input(getAllGroupsVailedator)
   .query(async ({ input, ctx }) => {
     try {
@@ -37,8 +40,9 @@ export const getAllGroup = protectedProcedure
     } catch (error) {
       console.error('Procedure Error:', error);
     }
-  });
-export const getAllFileInGroup = protectedProcedure
+  })
+
+  export const getAllFileInGroup = protectedProcedure
   .input(getAllFileInGroupVailedator)
   .query(async ({ input, ctx }) => {
     try {
@@ -49,7 +53,8 @@ export const getAllFileInGroup = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const resposeToJoin = protectedProcedure
+
+  export const resposeToJoin = protectedProcedure
   .input(responseValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -60,7 +65,8 @@ export const resposeToJoin = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const createFile = protectedProcedure
+
+  export const createFile = protectedProcedure
   .input(responseValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -71,7 +77,8 @@ export const createFile = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const createGroup = protectedProcedure
+
+  export const createGroup = protectedProcedure
   .input(creatNewGroupValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -82,7 +89,8 @@ export const createGroup = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const editFile = protectedProcedure
+
+  export const editFile = protectedProcedure
   .input(editFileValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -93,7 +101,8 @@ export const editFile = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const addNewFile = protectedProcedure
+
+  export const addNewFile = protectedProcedure
   .input(addNewFileValidator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -104,7 +113,8 @@ export const addNewFile = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const filterFileByCreatedAt = protectedProcedure
+
+  export const filterFileByCreatedAt = protectedProcedure
   .input(filterFileByCreatedAtVailedator)
   .query(async ({ input }) => {
     try {
@@ -115,7 +125,8 @@ export const filterFileByCreatedAt = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const filterFileByStatus = protectedProcedure
+
+  export const filterFileByStatus = protectedProcedure
   .input(filterFilestatusVailedator)
   .query(async ({ input }) => {
     try {
@@ -126,7 +137,8 @@ export const filterFileByStatus = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const deleteMyFiles = protectedProcedure
+
+  export const deleteMyFiles = protectedProcedure
   .input(deleteMyFileVailedator)
   .mutation(async ({ input, ctx }) => {
     try {
@@ -137,7 +149,8 @@ export const deleteMyFiles = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const getAllFileInAllGroup = protectedProcedure
+
+  export const getAllFileInAllGroup = protectedProcedure
   .input(getAllGroupsVailedator)
   .query(async ({ input, ctx }) => {
     try {
@@ -148,7 +161,8 @@ export const getAllFileInAllGroup = protectedProcedure
       console.error('Procedure Error:', error);
     }
   });
-export const exitGroup = protectedProcedure
+
+  export const exitGroup = protectedProcedure
   .input(exitGroupVailedator)
   .mutation(async ({ input, ctx }) => {
     try {

@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { fileInterface } from "~/pages/interface";
 import Link from "next/link";
+import { Group } from "@prisma/client";
 
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -9,10 +10,10 @@ const openModal = (modalName: string) => {
   }
 };
 
-const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
+const Folder = ({ folder }: { folder: Group }) => {
   return (
     <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 p-4 text-sm">
-      <FileDropDownComponent />
+      <FileDropDown />
       <Link
         href={{
           pathname: "/my-files",
@@ -28,7 +29,6 @@ const Folder = ({ folder }: { folder: fileInterface["folder"] }) => {
         </div>
         <div className="grid">
           <span className="text-base font-bold">{folder.name}</span>
-          <span className="mr-auto text-gray-500">{folder.files} files</span>
         </div>
       </Link>
     </div>
@@ -61,7 +61,7 @@ const Avatars = () => {
   );
 };
 
-function FileDropDownComponent() {
+function FileDropDown() {
   return (
     <div className="dropdown dropdown-end absolute right-1 top-1">
       <label tabIndex={0}>
