@@ -4,26 +4,41 @@ import type {
 } from "next";
 import { getServerSession } from "next-auth/next";
 
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken, signIn } from "next-auth/react";
 import Link from "next/link";
 import { AuthLayout } from "~/components/layout/AuthLayout";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 export default function SignIn({
   csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
+  const [errorMessage , setErrorMessage] = useState('')
 
-  const errorMessage = useMemo(() => {
-    if (router.query.error === "CredentialsSignin")
-      return "Incorrect Email or Password";
-    else return null;
-  }, [router.query.error]);
+  const onSigininSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    const formData = new FormData(event.target as HTMLFormElement);
+    signIn("credentials", {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false,
+    }).then((res) => {
+      if (res?.ok) window.location.replace("/");
+      else {
+        if(res?.status === 401) {
+          setErrorMessage('Incorrect email or password!')
+        }
+        else {
+          setErrorMessage('Please try again later')
+        }
+      }
+    })
+  };
+
 
   return (
     <AuthLayout>
-      <form method="post" action="/api/auth/callback/credentials">
+      <form onSubmit={onSigininSubmit}>
         <h3 className="mb-6 text-3xl">Welcome Back 👋</h3>
 
         {/* Alert for error */}
@@ -85,8 +100,12 @@ export default function SignIn({
         </button>
 
         <div className="mb-3 mt-5 text-center">
-          New to file-manager?<br/>
-          <Link href="/auth/signup" className="link-hover link-primary link font-bold">
+          New to file-manager?
+          <br />
+          <Link
+            href="/auth/signup"
+            className="link-hover link-primary link font-bold"
+          >
             Create an account
           </Link>
         </div>

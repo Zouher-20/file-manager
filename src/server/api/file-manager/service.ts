@@ -2,29 +2,25 @@
 
 import { db } from '~/server/db'
 import fs from 'fs'
+import { Group } from '@prisma/client'
 
 export class FilesService {
 
   //TODO this for get all MyGroups  with users With count of files
-  async getAllGroups(idUser: string, page: number, pageSize: number) {
+  async getAllGroups(idUser: string, page: number, pageSize: number) : Promise<Group[] | null> {
     const skip = (page - 1) * pageSize
     const take = pageSize
 
-    const userGroups = await db.usersOnGroups.findMany({
+    return await db.group.findMany({
       where: {
-        userId: idUser
-      },
-    })
-
-    const groupsIds = userGroups.map(el => el.id)
-    const result = await db.group.findMany({
-      where: {
-        id: {
-          in: groupsIds
+        users : {
+          some : {
+            userId : idUser
+          }
         }
       }
-    }) || []
-    return result
+      
+    })
   }
   // TODO this for get all File Ingroup 
   async getAllFileInGroup(
@@ -59,21 +55,20 @@ export class FilesService {
     }
   }
   async addNewGroup(groupName: string, userId: string) {
-    const newGroup = await db.group.create({
+    return await db.group.create({
       data: {
-        name: groupName
-      }
-    })
-    // Link the user to the group
-    await db.usersOnGroups.create({
-      data: {
-        user: {
-          connect: { id: userId }
-        },
-        group: {
-          connect: { id: newGroup.id }
-        },
-        status: true
+        name: groupName,
+        users : {
+          create : [
+            {
+              user : {
+                connect : {
+                  id : userId
+                } 
+              }
+            }
+          ]
+        }
       }
     })
   }

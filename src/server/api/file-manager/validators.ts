@@ -39,34 +39,34 @@ export const addNewFileValidator = z.object({
 export const deleteFileValidator = z.object({
   fileId: z.number(),
 })
-export const getAllGroupsVailedator = z.object({
+export const getAllGroupsValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10)
 })
-export const getAllFileInGroupVailedator = z.object({
+export const getAllFileInGroupValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   groupId: z.number()
 })
 
-export const filterFileByCreatedAtVailedator = z.object({
+export const filterFileByCreatedAtValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   groupId: z.number(),
   createdAt: z.boolean().default(true),
 
 })
-export const filterFilestatusVailedator = z.object({
+export const filterFilestatusValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   groupId: z.number(),
   status: z.string().default("-1"),
 
 })
-export const deleteMyFileVailedator = z.object({
+export const deleteMyFileValidator = z.object({
   fileId: z.number(),
 })
 
-export const exitGroupVailedator = z.object({
+export const exitGroupValidator = z.object({
   groupId: z.number(),
 })

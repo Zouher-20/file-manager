@@ -1,5 +1,5 @@
 import { protectedProcedure, publicProcedure } from "../trpc";
-import { searchValidator, addNewFileValidator, exitGroupVailedator, getAllFileInGroupVailedator, deleteMyFileVailedator, sendRequsetValidator, filterFilestatusVailedator, filterFileByCreatedAtVailedator, creatNewGroupValidator, getAllGroupsVailedator, responseValidator, editFileValidator } from "./validators";
+import { searchValidator, addNewFileValidator, exitGroupValidator, getAllFileInGroupValidator, deleteMyFileValidator, sendRequsetValidator, filterFilestatusValidator, filterFileByCreatedAtValidator, creatNewGroupValidator, getAllGroupsValidator, responseValidator, editFileValidator } from "./validators";
 import { FilesService } from "./service";
 
 
@@ -31,7 +31,7 @@ export const searchUser = protectedProcedure
   });
 
   export const getAllGroup = protectedProcedure
-  .input(getAllGroupsVailedator)
+  .input(getAllGroupsValidator)
   .query(async ({ input, ctx }) => {
     try {
       const { page, pageSize } = input;
@@ -43,7 +43,7 @@ export const searchUser = protectedProcedure
   })
 
   export const getAllFileInGroup = protectedProcedure
-  .input(getAllFileInGroupVailedator)
+  .input(getAllFileInGroupValidator)
   .query(async ({ input, ctx }) => {
     try {
       const { page, pageSize, groupId } = input;
@@ -83,7 +83,7 @@ export const searchUser = protectedProcedure
   .mutation(async ({ input, ctx }) => {
     try {
       const { groupName } = input;
-      const data = await filesService.addNewGroup(ctx.session.user.id, groupName,);
+      const data = await filesService.addNewGroup(groupName , ctx.session.user.id);
       return data;
     } catch (error) {
       console.error('Procedure Error:', error);
@@ -115,7 +115,7 @@ export const searchUser = protectedProcedure
   });
 
   export const filterFileByCreatedAt = protectedProcedure
-  .input(filterFileByCreatedAtVailedator)
+  .input(filterFileByCreatedAtValidator)
   .query(async ({ input }) => {
     try {
       const { groupId, page, pageSize, createdAt } = input;
@@ -127,7 +127,7 @@ export const searchUser = protectedProcedure
   });
 
   export const filterFileByStatus = protectedProcedure
-  .input(filterFilestatusVailedator)
+  .input(filterFilestatusValidator)
   .query(async ({ input }) => {
     try {
       const { groupId, page, pageSize, status } = input;
@@ -139,7 +139,7 @@ export const searchUser = protectedProcedure
   });
 
   export const deleteMyFiles = protectedProcedure
-  .input(deleteMyFileVailedator)
+  .input(deleteMyFileValidator)
   .mutation(async ({ input, ctx }) => {
     try {
       const { fileId } = input;
@@ -151,7 +151,7 @@ export const searchUser = protectedProcedure
   });
 
   export const getAllFileInAllGroup = protectedProcedure
-  .input(getAllGroupsVailedator)
+  .input(getAllGroupsValidator)
   .query(async ({ input, ctx }) => {
     try {
       const { page, pageSize } = input;
@@ -163,7 +163,7 @@ export const searchUser = protectedProcedure
   });
 
   export const exitGroup = protectedProcedure
-  .input(exitGroupVailedator)
+  .input(exitGroupValidator)
   .mutation(async ({ input, ctx }) => {
     try {
       const { groupId } = input;

@@ -41,7 +41,7 @@ const Appbar = () => {
           </a>
         </div>
       </div>
-      <div className="navbar-center hidden text-base-100 lg:flex ">
+      {/* <div className="navbar-center hidden text-base-100 lg:flex ">
         <div className="flex gap-2 ">
           {links &&
             links.map((link: LinksInterface["link"]) => {
@@ -60,7 +60,7 @@ const Appbar = () => {
               );
             })}
         </div>
-      </div>
+      </div> */}
 
       <div className="navbar-end flex items-center gap-4  text-base-100 ">
         <ThemeChanger />

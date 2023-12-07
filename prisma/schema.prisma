@@ -45,7 +45,6 @@ model UsersOnGroups {
     id      Int    @id @default(autoincrement())
     user    User   @relation(fields: [userId], references: [id])
     userId  String
-    status  Boolean
     group   Group  @relation(fields: [groupId], references: [id])
     groupId Int
 
