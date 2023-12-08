@@ -2,13 +2,10 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { getServerSession } from "next-auth/next";
-
 import { getCsrfToken, signIn } from "next-auth/react";
 import Link from "next/link";
 import { AuthLayout } from "~/components/layout/AuthLayout";
-import { useRouter } from "next/router";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function SignIn({
   csrfToken,

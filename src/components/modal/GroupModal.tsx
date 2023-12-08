@@ -1,3 +1,5 @@
+'use client'
+
 import { connect } from "react-redux";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NO_SPECIAL_CHARS_REGEX } from "~/utils/helpers";
@@ -6,7 +8,19 @@ const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
 });
 
-function AddGroupModal({ onSubmit }: { onSubmit: (name: string) => void }) {
+function GroupModal({
+  onSubmit,
+  title,
+  btnLabel,
+  color,
+  id
+}: {
+  onSubmit: (name: string) => void;
+  title: string;
+  btnLabel: string;
+  color: string;
+  id : string;
+}) {
   const [groupName, setGroupName] = useState<string>("");
 
   const onChange = (e: ChangeEvent) => {
@@ -15,23 +29,23 @@ function AddGroupModal({ onSubmit }: { onSubmit: (name: string) => void }) {
     setGroupName(name);
   };
 
-  const Submit = (event : FormEvent) => {
-    event.preventDefault()
+  const Submit = (event: FormEvent) => {
+    event.preventDefault();
     onSubmit(groupName);
     setGroupName("");
   };
 
   return (
-    <dialog id="add_group_modal" className="modal">
+    <dialog id={id} className="modal">
       <div className="modal-box">
         <div className="flex justify-between">
-          <h3 className=" text-xl font-bold">Create group</h3>
+          <h3 className=" text-xl font-bold capitalize">{title}</h3>
           <form method="dialog">
             <button className="cursor-pointer ">X</button>
           </form>
         </div>
 
-        <div className="modal-action ">
+        <div className="modal-action">
           <form onSubmit={Submit} className=" w-full">
             <div className="flex flex-col gap-1 pb-4">
               <label className="mb-1 font-bold">Name</label>
@@ -42,13 +56,16 @@ function AddGroupModal({ onSubmit }: { onSubmit: (name: string) => void }) {
                 required
                 pattern={NO_SPECIAL_CHARS_REGEX}
                 maxLength={32}
-                className="input input-bordered  w-full "
+                className="input input-bordered w-full "
               />
             </div>
             <div className=" flex justify-end gap-2">
-              <button type="submit" className="btn btn-success px-8  w-full lg:w-32 text-base-100">
-                Create
-              </button>
+              <button
+                type="submit"
+                className={`btn btn-${color} w-full  px-8 text-base-100 lg:w-32 capitalize`}
+              >
+                {btnLabel}
+              </button> 
             </div>
           </form>
         </div>
@@ -57,4 +74,4 @@ function AddGroupModal({ onSubmit }: { onSubmit: (name: string) => void }) {
   );
 }
 
-export default connect(mapStateToProps)(AddGroupModal);
+export default connect(mapStateToProps)(GroupModal);

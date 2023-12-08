@@ -1,7 +1,15 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { fileInterface } from "~/pages/interface";
 import Link from "next/link";
 import { Group } from "@prisma/client";
+import DropDownMenu from "../DropDownMenu";
+
+const dropDownItems = [
+  {
+    label: "Leave group",
+    color : "error",
+    action: () => openModal("leave_modal"),
+  },
+];
 
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -10,14 +18,14 @@ const openModal = (modalName: string) => {
   }
 };
 
-const Folder = ({ folder }: { folder: Group }) => {
+const Group = ({ group }: { group: Group }) => {
   return (
     <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 p-4 text-sm">
-      <FileDropDown />
+      <DropDownMenu items={dropDownItems} />
       <Link
         href={{
           pathname: "/my-files",
-          query: { id: folder.id },
+          query: { id: group.id },
         }}
       >
         <div className="flex">
@@ -25,17 +33,17 @@ const Folder = ({ folder }: { folder: Group }) => {
             className="mr-auto h-12 w-12 text-primary"
             icon={"bi:folder-fill"}
           />
-          <Avatars />
+          {/* <Avatars /> */}
         </div>
         <div className="grid">
-          <span className="text-base font-bold">{folder.name}</span>
+          <span className="text-base font-bold">{group.name}</span>
         </div>
       </Link>
     </div>
   );
 };
 
-export default Folder;
+export default Group;
 
 const Avatars = () => {
   return (
@@ -61,20 +69,3 @@ const Avatars = () => {
   );
 };
 
-function FileDropDown() {
-  return (
-    <div className="dropdown dropdown-end absolute right-1 top-1">
-      <label tabIndex={0}>
-        <Icon className="h-4 w-4 " icon={"pepicons-pop:dots-y"} />
-      </label>
-      <ul
-        tabIndex={0}
-        className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow"
-      >
-        <li>
-          <a onClick={() => openModal("leave_modal")}>leave</a>
-        </li>
-      </ul>
-    </div>
-  );
-}
