@@ -12,6 +12,14 @@ export const searchValidator = z.object({
   pageSize: z.number().default(10)
 })
 
+export const deleteGroupValidator = z.number()
+export const leaveGroupValidator = z.number()
+
+
+export const updateGroupValidator = z.object({
+  groupName: z.string().min(1),
+  groupId: z.number(),
+})
 export const sendRequsetValidator = z.object({
   receiverId: z.string().min(1),
   groupId: z.number(),
@@ -39,7 +47,7 @@ export const addNewFileValidator = z.object({
 export const deleteFileValidator = z.object({
   fileId: z.number(),
 })
-export const getAllGroupsValidator = z.object({
+export const getGroupsValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10)
 })

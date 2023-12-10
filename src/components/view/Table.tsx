@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/router";
-import { Group , File } from "@prisma/client";
+import { Group, File } from "@prisma/client";
 
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -13,7 +13,7 @@ const Table = ({
   dataTable,
   actionType,
 }: {
-  dataTable: {rows : File[] | Group[] , cols : unknown }
+  dataTable: { rows: File[] | Group[]; cols: unknown };
   actionType: string;
 }) => {
   return (
@@ -73,7 +73,7 @@ function GroupAction({ id }: { id: number }) {
         icon={
           "streamline:interface-logout-arrow-exit-frame-leave-logout-rectangle-right"
         }
-        onClick={() => openModal("leave_modal")}
+        onClick={() => openModal("leave-modal")}
       />
     </td>
   );

@@ -20,7 +20,7 @@ model File {
     path      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdBy   User   @relation(fields: [createdById], references: [id] , onDelete: Cascade)
     createdById String
     status      String
     group   Group @relation(fields: [groupId], references: [id])
@@ -35,6 +35,8 @@ model Group {
     name      String
     createdAt DateTime        @default(now())
     updatedAt DateTime        @updatedAt
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
     files     File[]
     users     UsersOnGroups[]
 
@@ -43,9 +45,9 @@ model Group {
 
 model UsersOnGroups {
     id      Int    @id @default(autoincrement())
-    user    User   @relation(fields: [userId], references: [id])
+    user    User   @relation(fields: [userId], references: [id] , onDelete: Cascade)
     userId  String
-    group   Group  @relation(fields: [groupId], references: [id])
+    group   Group  @relation(fields: [groupId], references: [id] , onDelete: Cascade)
     groupId Int
 
     @@index([id])
@@ -68,6 +70,7 @@ model User {
     sessions      Session[]
     files         File[]
     groups        UsersOnGroups[]
+    ownGroups     Group[]
 }
 
 model VerificationToken {

@@ -1,17 +1,15 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { fileInterface } from "../interface";
 import { useState, useEffect } from "react";
 import Table from "~/components/view/Table";
 import UpdateModal from "~/components/modal/UpdateModal";
 import DeleteModal from "~/components/modal/DeleteModal";
-import AddNewUserModal from "../../components/modal/AddUsersModal";
 import GridListComponent from "~/components/form/GridList";
 import DropDownCommponent from "~/components/form/Dropdown";
 import FileCard from "~/components/cards/File";
 import { useRouter } from "next/router";
 import { MainLayout } from "~/components/layout/MainLayout";
 import AddFileModal from "~/components/modal/AddFileModal";
-
+import { File } from "@prisma/client";
 const MyFiles = () => {
   const router = useRouter();
   const id = router.query.id;
@@ -21,48 +19,6 @@ const MyFiles = () => {
     files: [{ id: 0, name: "", state: "", date: "" }],
   });
   const tableRows = ["", "Name", "State", "Date", "Actions"];
-
-  useEffect(() => {
-    if (id) {
-      //getGroupFiles here
-      const data = {
-        name: "Alpha group",
-        files: [
-          { id: 1, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 2, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 3, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 4, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 5, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 6, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 7, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 8, name: "Book name aa1", state: "free", date: "22/4/2001" },
-          { id: 9, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        ],
-      };
-      setGroup(data);
-    } else {
-      //getAllUserFile here
-      const files: fileInterface["files"] = [
-        { id: 1, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 2, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 3, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 4, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 5, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 6, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 7, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 8, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 9, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 10, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 11, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 12, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 13, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 14, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 15, name: "Book name aa1", state: "free", date: "22/4/2001" },
-        { id: 16, name: "Book name aa1", state: "free", date: "22/4/2001" },
-      ];
-      setGroup({ name: "", files });
-    }
-  }, []);
 
   const openModal = (modalName: string) => {
     const modal = document.getElementById(modalName);

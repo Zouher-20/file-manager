@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
 import { connect } from "react-redux";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { NO_SPECIAL_CHARS_REGEX } from "~/utils/helpers";
 
 const mapStateToProps = (state: any) => ({
@@ -13,16 +13,16 @@ function GroupModal({
   title,
   btnLabel,
   color,
-  id
+  id,
 }: {
   onSubmit: (name: string) => void;
   title: string;
   btnLabel: string;
   color: string;
-  id : string;
+  id: string;
 }) {
   const [groupName, setGroupName] = useState<string>("");
-
+  const closeBtn = useRef<HTMLButtonElement | null>(null);
   const onChange = (e: ChangeEvent) => {
     let name: string = groupName;
     name = (e.target as HTMLInputElement).value;
@@ -33,6 +33,7 @@ function GroupModal({
     event.preventDefault();
     onSubmit(groupName);
     setGroupName("");
+    (closeBtn?.current as HTMLButtonElement).click();
   };
 
   return (
@@ -41,7 +42,9 @@ function GroupModal({
         <div className="flex justify-between">
           <h3 className=" text-xl font-bold capitalize">{title}</h3>
           <form method="dialog">
-            <button className="cursor-pointer ">X</button>
+            <button ref={closeBtn} className="cursor-pointer ">
+              X
+            </button>
           </form>
         </div>
 
@@ -62,10 +65,10 @@ function GroupModal({
             <div className=" flex justify-end gap-2">
               <button
                 type="submit"
-                className={`btn btn-${color} w-full  px-8 text-base-100 lg:w-32 capitalize`}
+                className={`btn btn-${color} w-full  px-8 capitalize text-base-100 lg:w-32`}
               >
                 {btnLabel}
-              </button> 
+              </button>
             </div>
           </form>
         </div>

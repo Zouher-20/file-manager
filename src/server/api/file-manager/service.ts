@@ -6,21 +6,111 @@ import { Group } from '@prisma/client'
 
 export class FilesService {
 
-  //TODO this for get all MyGroups  with users With count of files
-  async getAllGroups(idUser: string, page: number, pageSize: number) : Promise<Group[] | null> {
+
+  async getUserGroups(idUser: string, page: number, pageSize: number): Promise<Group[] | null> {
     const skip = (page - 1) * pageSize
     const take = pageSize
 
     return await db.group.findMany({
       where: {
-        users : {
-          some : {
-            userId : idUser
+        createdById: idUser
+      }
+    })
+  }
+
+  async getSharedGroups(idUser: string, page: number, pageSize: number): Promise<Group[] | null> {
+    const skip = (page - 1) * pageSize
+    const take = pageSize
+
+    return await db.group.findMany({
+      where: {
+        AND: [
+          {
+            createdById: {
+              not: {
+                equals: idUser
+              }
+            }
+          },
+          {
+            users: {
+              some: {
+                userId: {
+                  equals: idUser
+                }
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           }
         }
       }
-      
     })
+  }
+  async addNewGroup(groupName: string, userId: string) {
+    return await db.group.create({
+      data: {
+        name: groupName,
+        createdById: userId,
+        users: {
+          create: [
+            {
+              user: {
+                connect: {
+                  id: userId
+                }
+              }
+            }
+          ]
+        }
+      }
+    })
+  }
+  async deleteGroup(id: number) {
+    return await db.group.delete(
+      {
+        where: {
+          id
+        },
+        include: {
+          users: true
+        }
+      }
+    )
+  }
+  async leaveGroup(id: number, userId: string) {
+    return await db.user.update(
+      {
+        where: {
+          id: userId
+        },
+        data: {
+          groups: {
+            deleteMany: {
+              groupId: id
+            }
+          }
+        }
+      }
+    )
+  }
+  async updateGroup(id: number, groupName: string) {
+    return await db.group.update(
+      {
+        where: {
+          id
+        },
+        data: {
+          name: groupName
+        }
+      }
+    )
   }
   // TODO this for get all File Ingroup 
   async getAllFileInGroup(
@@ -54,24 +144,7 @@ export class FilesService {
       files
     }
   }
-  async addNewGroup(groupName: string, userId: string) {
-    return await db.group.create({
-      data: {
-        name: groupName,
-        users : {
-          create : [
-            {
-              user : {
-                connect : {
-                  id : userId
-                } 
-              }
-            }
-          ]
-        }
-      }
-    })
-  }
+
   //TODO this for AddNew file and Create Upload in public Folder
   async addNewFile(
     groupId: number,

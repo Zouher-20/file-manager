@@ -1,15 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
-import { Group } from "@prisma/client";
+import { Group, User } from "@prisma/client";
 import DropDownMenu from "../DropDownMenu";
-
-const dropDownItems = [
-  {
-    label: "Leave group",
-    color : "error",
-    action: () => openModal("leave_modal"),
-  },
-];
+import { useSession } from "next-auth/react";
 
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -18,16 +11,52 @@ const openModal = (modalName: string) => {
   }
 };
 
-const Group = ({ group }: { group: Group }) => {
+const Group = ({
+  group,
+  onDeleteGroupClicked,
+  onChangeNameClicked,
+  onLeaveGroupClicked,
+}: {
+  group: Group & { createdBy: Pick<User, "id" | "name"> };
+  onDeleteGroupClicked: (id: number) => unknown;
+  onChangeNameClicked: (id: number) => unknown;
+  onLeaveGroupClicked: (id: number) => unknown;
+}) => {
+  const { data: session } = useSession();
+  const dropDownItems =
+    session?.user?.id === group.createdById
+      ? [
+          {
+            label: "Change name",
+            color: "primary",
+            action: () => {
+              openModal("change-name-modal");
+              onChangeNameClicked(group.id);
+            },
+          },
+          {
+            label: "Delete",
+            color: "error",
+            action: () => {
+              openModal("delete-modal");
+              onDeleteGroupClicked(group.id);
+            },
+          },
+        ]
+      : [
+          {
+            label: "Leave",
+            color: "error",
+            action: () => {
+              openModal("leave-modal");
+              onLeaveGroupClicked(group.id);
+            },
+          },
+        ];
   return (
     <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 p-4 text-sm">
       <DropDownMenu items={dropDownItems} />
-      <Link
-        href={{
-          pathname: "/my-files",
-          query: { id: group.id },
-        }}
-      >
+      <Link href={`/${group.id}`}>
         <div className="flex">
           <Icon
             className="mr-auto h-12 w-12 text-primary"
@@ -37,6 +66,9 @@ const Group = ({ group }: { group: Group }) => {
         </div>
         <div className="grid">
           <span className="text-base font-bold">{group.name}</span>
+          {session?.user?.id !== group.createdById && (
+            <small>owner: {group.createdBy.name}</small>
+          )}
         </div>
       </Link>
     </div>
@@ -68,4 +100,3 @@ const Avatars = () => {
     </div>
   );
 };
-

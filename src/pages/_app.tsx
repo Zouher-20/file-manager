@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
+import { Toaster } from "react-hot-toast";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -29,6 +30,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <div className={`${exo.className} antialiased`}>
             <Component {...pageProps} />
           </div>
+          <Toaster />
         </ThemeProvider>
       </Provider>
     </SessionProvider>
