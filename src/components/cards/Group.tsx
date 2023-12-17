@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Group, User } from "@prisma/client";
 import DropDownMenu from "../DropDownMenu";
 import { useSession } from "next-auth/react";
-
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
   if (modal !== null) {
@@ -16,11 +18,13 @@ const Group = ({
   onDeleteGroupClicked,
   onChangeNameClicked,
   onLeaveGroupClicked,
+  onUsersClicked,
 }: {
   group: Group & { createdBy: Pick<User, "id" | "name"> };
-  onDeleteGroupClicked: (id: number) => unknown;
-  onChangeNameClicked: (id: number) => unknown;
-  onLeaveGroupClicked: (id: number) => unknown;
+  onDeleteGroupClicked: (id: number) => void;
+  onChangeNameClicked: (id: number) => void;
+  onLeaveGroupClicked: (id: number) => void;
+  onUsersClicked: (id: number) => void;
 }) => {
   const { data: session } = useSession();
   const dropDownItems =
@@ -35,6 +39,16 @@ const Group = ({
             },
           },
           {
+            label: "Users",
+            color: "success",
+            action: () => {
+              onUsersClicked(group.id);
+              setTimeout(() => {
+                openModal("users-modal");
+              }, 0);
+            },
+          },
+          {
             label: "Delete",
             color: "error",
             action: () => {
@@ -46,7 +60,7 @@ const Group = ({
       : [
           {
             label: "Leave",
-            color: "error",
+            color: "warning",
             action: () => {
               openModal("leave-modal");
               onLeaveGroupClicked(group.id);
@@ -54,7 +68,7 @@ const Group = ({
           },
         ];
   return (
-    <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 p-4 text-sm">
+    <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 p-6 text-sm">
       <DropDownMenu items={dropDownItems} />
       <Link href={`/${group.id}`}>
         <div className="flex">
@@ -64,11 +78,21 @@ const Group = ({
           />
           {/* <Avatars /> */}
         </div>
-        <div className="grid">
-          <span className="text-base font-bold">{group.name}</span>
+        <h3 className="text-base font-bold">{group.name}</h3>
+        <div className="mt-1 flex flex-col gap-1 px-1">
           {session?.user?.id !== group.createdById && (
-            <small>owner: {group.createdBy.name}</small>
+            <div className="flex items-center gap-2">
+              <Icon className="inline h-4 w-4" icon={"solar:user-broken"} />
+              {group.createdBy.name}
+            </div>
           )}
+          <time className="flex items-center gap-2 text-xs font-light">
+            <Icon
+              className="inline h-4 w-4"
+              icon={"solar:clock-circle-broken"}
+            />
+            {dayjs(group.createdAt).fromNow()}
+          </time>
         </div>
       </Link>
     </div>

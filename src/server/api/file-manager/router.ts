@@ -1,12 +1,17 @@
-
+import { createTRPCRouter } from "~/server/api/trpc";
 import {
-  createTRPCRouter,
-} from "~/server/api/trpc";
-import {
-  leaveGroup, updateGroup, getSharedGroups, deleteGroup, exitGroup, getUserGroups, getAllFileInGroup,
-  getAllFileInAllGroup, searchUser, addNewFile, deleteMyFiles, createGroup, sendRequset, resposeToJoin,
-  editFile, filterFileByCreatedAt, filterFileByStatus
-} from './controller'
+  leaveGroup,
+  updateGroup,
+  getSharedGroups,
+  deleteGroup,
+  getUserGroups,
+  getAllFileInGroup,
+  createFile,
+  deleteFile,
+  createGroup,
+  checkin,
+  checkout
+} from "./controller";
 
 const trpcRoutes = {
   deleteGroup,
@@ -14,19 +19,12 @@ const trpcRoutes = {
   leaveGroup: leaveGroup,
   getSharedGroups: getSharedGroups,
   getAllFileInGroup: getAllFileInGroup,
-  addNewFile: addNewFile,
+  createFile: createFile,
   addNewGroup: createGroup,
   updateGroup: updateGroup,
-  updateFile: editFile,
-  sendJion: sendRequset,
-  resposeJoin: resposeToJoin,
-  filterFileByCreatedAt: filterFileByCreatedAt,
-  filterFileByStatus: filterFileByStatus,
-  deleteMyFiles: deleteMyFiles,
-  exitGroup: exitGroup,
-  getAllFileInAllGroup: getAllFileInAllGroup,
-  searchUser: searchUser
-}
+  deleteFile: deleteFile,
+  checkin,
+  checkout
+};
 
-export const fileRouter =
-  createTRPCRouter(trpcRoutes);
+export const fileRouter = createTRPCRouter(trpcRoutes);

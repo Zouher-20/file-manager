@@ -1,24 +1,35 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState, useEffect } from "react";
-import Table from "~/components/view/Table";
-import UpdateModal from "~/components/modal/UpdateModal";
-import DeleteModal from "~/components/modal/DeleteModal";
-import GridListComponent from "~/components/form/GridList";
-import DropDownCommponent from "~/components/form/Dropdown";
-import FileCard from "~/components/cards/File";
+import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import NoFilesCaption from "~/components/NoFilesCaption";
+import FileCard from "~/components/cards/File";
 import { MainLayout } from "~/components/layout/MainLayout";
-import AddFileModal from "~/components/modal/AddFileModal";
-import { File } from "@prisma/client";
-const MyFiles = () => {
+import ConfirmModal from "~/components/modal/ConfirmModal";
+import FileModal from "~/components/modal/FileModal";
+import { api } from "~/utils/api";
+import fromNow from "dayjs/plugin/relativeTime";
+dayjs.extend(fromNow);
+
+const Files = () => {
+  const [fileId, setFileId] = useState<number | null>(null);
+  const [minutesPassed, setMinutesPassed] = useState<number>(0);
+  setInterval(() => {
+    setMinutesPassed(minutesPassed + 1);
+  }, 60000);
   const router = useRouter();
-  const id = router.query.id;
-  const [vertical, setVertical] = useState("grid");
-  const [group, setGroup] = useState({
-    name: "",
-    files: [{ id: 0, name: "", state: "", date: "" }],
-  });
-  const tableRows = ["", "Name", "State", "Date", "Actions"];
+  const { data, isSuccess, isLoading, dataUpdatedAt, refetch } =
+    api.file.getAllFileInGroup.useQuery({
+      groupId: parseInt(router.query?.id as string),
+    });
+  const createFileMutation = api.file.createFile.useMutation();
+  const deleteFileMutation = api.file.deleteFile.useMutation();
+  const checkinFileMutation = api.file.checkin.useMutation();
+  const checkoutMutation = api.file.checkout.useMutation();
+
+  const lastSync = useMemo(() => {
+    return dayjs(dataUpdatedAt).fromNow();
+  }, [minutesPassed]);
 
   const openModal = (modalName: string) => {
     const modal = document.getElementById(modalName);
@@ -26,76 +37,123 @@ const MyFiles = () => {
       (modal as unknown as { showModal: () => void }).showModal();
     }
   };
-  return (
-    <MainLayout>
-      <div className="flex flex-col gap-2">
-        <AddNewUserModal />
-        <UpdateModal />
-        <DeleteModal />
-        <AddFileModal />
-        <span className=" text-3xl font-bold">
-          {id ? group.name : "All Files"} {id}
-        </span>
-        <div className="my-2 mr-4 grid items-center gap-4 sm:flex sm:flex-row-reverse">
-          <GridListComponent
-            vertical={vertical}
-            setVertical={(vertical: string) => setVertical(vertical)}
-          />
-          <DropDownCommponent
-            defaultValue={"newest"}
-            itemList={["newest", "latest"]}
-            listName="Order by"
-          />
-          <DropDownCommponent
-            defaultValue={"free"}
-            itemList={["free", "used", "reserved"]}
-            listName="Status"
-          />
-
-          {id && (
-            <div className="flex w-full gap-2 max-sm:justify-center">
-              <button
-                className="btn btn-square btn-outline btn-primary btn-sm "
-                onClick={() => openModal("add_user_modal")}
-              >
-                <Icon className="h-6 w-6" icon={"solar:user-broken"} />
-              </button>
-              <button
-                title="add-folder"
-                type="button"
-                className="btn btn-square btn-outline btn-primary btn-sm"
-                onClick={() => openModal("add_file_modal")}
-              >
-                <Icon className="h-6 w-6" icon={"solar:add-folder-broken"} />
-              </button>
-            </div>
-          )}
-        </div>
-        <div
-          className={
-            "grid overflow-x-hidden py-4 " +
-            (vertical === "grid" &&
-              "gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5")
+  const createFile = ({
+    name,
+    contents,
+  }: {
+    name: string;
+    contents: string;
+  }) => {
+    if (data && data.id)
+      createFileMutation
+        .mutateAsync({ name, contents, groupId: data?.id })
+        .then((res) => {
+          if (res?.id) {
+            toast.success("File created successfully!");
+            refetch();
+            setMinutesPassed(minutesPassed + 1);
           }
-        >
-          {vertical === "grid" ? (
-            group.files.map((file: fileInterface["file"]) => {
-              return (
-                <div key={file.id}>
-                  <FileCard card={file} />
-                </div>
-              );
-            })
-          ) : (
-            <Table
-              dataTable={{ rows: tableRows, cols: group.files }}
-              actionType="files"
-            />
-          )}
-        </div>
-      </div>
-    </MainLayout>
+        });
+  };
+  const deleteFile = () => {
+    if (fileId)
+      deleteFileMutation.mutateAsync(fileId).then((res) => {
+        if (res?.id) {
+          toast.success("Group deleted successfully!");
+          refetch();
+          setMinutesPassed(minutesPassed + 1);
+        }
+      });
+  };
+  const checkinFile = (id: number) => {
+    checkinFileMutation.mutateAsync(id).then((res) => {
+      if (res?.id) {
+        toast.success("File is checked in by you now");
+        refetch();
+        setMinutesPassed(minutesPassed + 1);
+      }
+    });
+  };
+  const checkoutFile = (id: number) => {
+    checkoutMutation.mutateAsync(id).then((res) => {
+      if (res?.id) {
+        toast.success("File is free to use now");
+        refetch();
+        setMinutesPassed(minutesPassed + 1);
+      }
+    });
+  };
+
+  return (
+    <>
+      {" "}
+      <ConfirmModal
+        id="delete-file-modal"
+        title="Confirm deleting file"
+        text="Are you sure you want to delete this file ?"
+        btnLabel="Delete"
+        color="error"
+        callback={deleteFile}
+      />
+      <FileModal
+        btnLabel="create"
+        title="create file"
+        id="create-file-modal"
+        color="success"
+        onSubmit={(form: { name: string; contents: string }) =>
+          createFile(form)
+        }
+      />
+      <MainLayout>
+        {isLoading && <div className="text-xl">Loading...</div>}
+        {isSuccess && !isLoading && data && (
+          <div>
+            <div className="my-6 flex items-center justify-between">
+              <h1 className=" text-3xl font-bold">{data.name}</h1>
+              <div className="space-x-2">
+                <span className="text-xs">Last sync : {lastSync}</span>
+                <button
+                  className="btn btn-info btn-sm capitalize text-base-100"
+                  onClick={async () => {
+                    await refetch();
+                    setMinutesPassed(minutesPassed + 1);
+                  }}
+                >
+                  sync
+                </button>
+                <button
+                  className="btn btn-success btn-sm capitalize text-base-100"
+                  onClick={() => {
+                    openModal("create-file-modal");
+                  }}
+                >
+                  Create file
+                </button>
+              </div>
+            </div>
+            {data?.files.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+                {data.files.map((file) => (
+                  <FileCard
+                    key={file.id}
+                    onDeleteClicked={setFileId}
+                    onCheckinClicked={checkinFile}
+                    onCheckoutClicked={checkoutFile}
+                    onEditClicked={setFileId}
+                    file={file}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6">
+                <NoFilesCaption />
+              </div>
+            )}
+          </div>
+        )}
+      </MainLayout>
+    </>
   );
 };
 
-export default MyFiles;
+export default Files;

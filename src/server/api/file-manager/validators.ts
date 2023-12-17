@@ -1,80 +1,57 @@
-import { Group } from "@prisma/client";
 import { z } from "zod";
 
-
-export const createFileValidator = z.object({ name: z.string().min(1) })
-
-
-export const searchValidator = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  page: z.number().default(1),
-  pageSize: z.number().default(10)
-})
-
-export const deleteGroupValidator = z.number()
-export const leaveGroupValidator = z.number()
-
+export const deleteGroupValidator = z.number();
+export const leaveGroupValidator = z.number();
 
 export const updateGroupValidator = z.object({
   groupName: z.string().min(1),
   groupId: z.number(),
-})
-export const sendRequsetValidator = z.object({
-  receiverId: z.string().min(1),
-  groupId: z.number(),
-})
+});
 
 export const creatNewGroupValidator = z.object({
   groupName: z.string().min(1),
-})
-export const responseValidator = z.object({
-  state: z.boolean(),
-  groupId: z.number(),
-})
+});
+
 export const editFileValidator = z.object({
   fileName: z.string(),
   fileId: z.number(),
   state: z.boolean(),
-  file: z.instanceof(File)
-})
-export const addNewFileValidator = z.object({
-  fileName: z.string(),
+  file: z.instanceof(File),
+});
+export const createFileValidator = z.object({
+  name: z.string(),
   groupId: z.number(),
-  file: z.instanceof(File)
-})
+  contents: z.string(),
+});
 
-export const deleteFileValidator = z.object({
-  fileId: z.number(),
-})
 export const getGroupsValidator = z.object({
   page: z.number().default(1),
-  pageSize: z.number().default(10)
-})
+  pageSize: z.number().default(10),
+});
 export const getAllFileInGroupValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
-  groupId: z.number()
-})
+  groupId: z.number(),
+});
 
 export const filterFileByCreatedAtValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   groupId: z.number(),
   createdAt: z.boolean().default(true),
-
-})
+});
 export const filterFilestatusValidator = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   groupId: z.number(),
   status: z.string().default("-1"),
+});
+export const deleteFileValidator = z.number();
+export const checkinValidator = z.number();
+export const checkoutValidator = z.number();
 
-})
-export const deleteMyFileValidator = z.object({
-  fileId: z.number(),
-})
+
 
 export const exitGroupValidator = z.object({
   groupId: z.number(),
-})
+});

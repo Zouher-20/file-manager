@@ -16,7 +16,7 @@ interface DropDownProps {
 
 function DropDownMenu({ btnIcon, items }: DropDownProps) {
   return (
-    <div className="dropdown dropdown-end absolute right-4 top-4">
+    <div className="dropdown dropdown-end absolute right-3 top-3">
       <label tabIndex={0}>
         <Icon className="h-4 w-4" icon={btnIcon || "pepicons-pop:dots-y"} />
       </label>

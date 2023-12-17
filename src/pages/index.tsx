@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import { Group } from "@prisma/client";
 import NoGroupsCaption from "~/components/NoGroupsCaption";
 import toast from "react-hot-toast";
+import UsersModal from "~/components/modal/UsersModal";
 
 const MyGroups = () => {
   const { data, isLoading, isSuccess } = api.file.getUserGroups.useQuery({});
@@ -78,81 +79,85 @@ const MyGroups = () => {
   };
 
   return (
-    <MainLayout>
-      <div className="flex h-[82vh] flex-col gap-1">
-        <GroupModal
-          btnLabel="create"
-          title="create group"
-          id="create-group-modal"
-          color="success"
-          onSubmit={(name: string) => Submit(name)}
-        />
-        <GroupModal
-          btnLabel="change"
-          title="Change Group Name"
-          id="change-name-modal"
-          color="primary"
-          onSubmit={(name: string) => changeName(name)}
-        />
-        <ConfirmModal
-          id="leave-modal"
-          title="Confirm leaving group"
-          text="Are you sure you want to leave this group ?"
-          btnLabel="Leave"
-          color="error"
-          callback={leaveGroup}
-        />
-        <ConfirmModal
-          id="delete-modal"
-          title="Confirm deleting group"
-          text="Are you sure you want to delete this group ?"
-          btnLabel="delete"
-          color="error"
-          callback={deleteGroup}
-        />
-        <div className="mt-6 flex justify-end ">
-          <button
-            className="btn btn-success btn-sm capitalize text-base-100"
-            onClick={() => openModal("create-group-modal")}
-          >
-            Create group
-          </button>
-        </div>
-        <h1 className="text-3xl font-bold">My Groups</h1>
-        {groupsData && groupsData.length > 0 ? (
-          <div className="xs:overflow-x-hidden xs:px-12 grid grid-cols-2 gap-4  py-4 md:grid-cols-3 xl:grid-cols-5">
-            {groupsData?.map((group: Group) => {
-              return (
-                <div key={group.id}>
-                  <GroupCard
-                    onChangeNameClicked={setGroupId}
-                    onDeleteGroupClicked={setGroupId}
-                    group={group}
-                  />
-                </div>
-              );
-            })}
+    <>
+      <GroupModal
+        btnLabel="create"
+        title="create group"
+        id="create-group-modal"
+        color="success"
+        onSubmit={(name: string) => Submit(name)}
+      />
+      <GroupModal
+        btnLabel="change"
+        title="Change Group Name"
+        id="change-name-modal"
+        color="primary"
+        onSubmit={(name: string) => changeName(name)}
+      />
+      <ConfirmModal
+        id="leave-modal"
+        title="Confirm leaving group"
+        text="Are you sure you want to leave this group ?"
+        btnLabel="Leave"
+        color="error"
+        callback={leaveGroup}
+      />
+      <ConfirmModal
+        id="delete-modal"
+        title="Confirm deleting group"
+        text="Are you sure you want to delete this group ?"
+        btnLabel="delete"
+        color="error"
+        callback={deleteGroup}
+      />
+      <MainLayout>
+        <div className="flex flex-col gap-1">
+          {groupId && <UsersModal groupId={groupId} />}
+          <div className="mb-2 mt-6 flex items-center justify-between ">
+            <h1 className="text-3xl font-bold">My Groups</h1>
+            <button
+              className="btn btn-success btn-sm capitalize text-base-100"
+              onClick={() => openModal("create-group-modal")}
+            >
+              Create group
+            </button>
           </div>
-        ) : (
-          <NoGroupsCaption />
-        )}
+          {groupsData && groupsData.length > 0 ? (
+            <div className="xs:overflow-x-hidden xs:px-12 grid grid-cols-2 gap-4  py-4 md:grid-cols-3 xl:grid-cols-5">
+              {groupsData?.map((group: Group) => {
+                return (
+                  <div key={group.id}>
+                    <GroupCard
+                      onChangeNameClicked={setGroupId}
+                      onDeleteGroupClicked={setGroupId}
+                      onUsersClicked={setGroupId}
+                      group={group}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <NoGroupsCaption />
+          )}
 
-        <h1 className="mt-8 text-3xl font-bold">Shared Groups</h1>
-        {sharedGroups.data && sharedGroups.data.length > 0 ? (
-          <div className="xs:overflow-x-hidden xs:px-12 grid grid-cols-2 gap-4 py-4 md:grid-cols-3 xl:grid-cols-5">
-            {sharedGroups.data?.map((group: Group) => {
-              return (
-                <div key={group.id}>
-                  <GroupCard onLeaveGroupClicked={setGroupId} group={group} />
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <NoGroupsCaption />
-        )}
-      </div>
-    </MainLayout>
+          <h1 className="mt-8 text-3xl font-bold">Shared Groups</h1>
+          {sharedGroups.data && sharedGroups.data.length > 0 ? (
+            <div className="xs:overflow-x-hidden xs:px-12 grid grid-cols-2 gap-4 py-4 md:grid-cols-3 xl:grid-cols-5">
+              {sharedGroups.data?.map((group: Group) => {
+                return (
+                  <div key={group.id}>
+                    <GroupCard onLeaveGroupClicked={setGroupId} group={group} />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <NoGroupsCaption />
+          )}
+        </div>
+      </MainLayout>
+    </>
   );
 };
 

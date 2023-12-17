@@ -14,3 +14,9 @@ export const createUserValidator = z.object({
             });
         }
     })
+
+export const usersByGroupValidator = z.number()
+export const addUserToGroupValidator = z.object({
+    groupId: z.number(),
+    userId: z.string()
+})

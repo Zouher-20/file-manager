@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider   = "prisma-client-js"
     engineType = "binary"
 }
 
@@ -16,38 +16,39 @@ datasource db {
 }
 
 model File {
-    id        Int      @id @default(autoincrement())
-    path      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    createdBy   User   @relation(fields: [createdById], references: [id] , onDelete: Cascade)
+    id          Int      @id @default(autoincrement())
+    path        String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdBy   User     @relation(name: "author", fields: [createdById], references: [id], onDelete: Cascade)
     createdById String
-    status      String
-    group   Group @relation(fields: [groupId], references: [id])
-    groupId Int
-    name    String
+    takenBy     User?    @relation(name: "taker", fields: [takenById], references: [id], onDelete: Cascade)
+    takenById   String?
+    group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    groupId     Int
+    name        String
 
     @@index([id])
 }
 
 model Group {
-    id        Int             @id @default(autoincrement())
-    name      String
-    createdAt DateTime        @default(now())
-    updatedAt DateTime        @updatedAt
-    createdBy   User   @relation(fields: [createdById], references: [id])
+    id          Int             @id @default(autoincrement())
+    name        String
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+    createdBy   User            @relation(fields: [createdById], references: [id])
     createdById String
-    files     File[]
-    users     UsersOnGroups[]
+    files       File[]
+    users       UsersOnGroups[]
 
     @@index([id])
 }
 
 model UsersOnGroups {
     id      Int    @id @default(autoincrement())
-    user    User   @relation(fields: [userId], references: [id] , onDelete: Cascade)
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId  String
-    group   Group  @relation(fields: [groupId], references: [id] , onDelete: Cascade)
+    group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId Int
 
     @@index([id])
@@ -63,14 +64,15 @@ model Session {
 }
 
 model User {
-    id            String          @id @default(cuid())
-    name          String?
-    email         String?         @unique
-    password      String
-    sessions      Session[]
-    files         File[]
-    groups        UsersOnGroups[]
-    ownGroups     Group[]
+    id         String          @id @default(cuid())
+    name       String?
+    email      String?         @unique
+    password   String
+    sessions   Session[]
+    files      File[]          @relation("author")
+    takenFiles File[]          @relation("taker")
+    groups     UsersOnGroups[]
+    ownGroups  Group[]
 }
 
 model VerificationToken {
