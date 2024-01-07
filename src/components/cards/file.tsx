@@ -5,6 +5,7 @@ import fromNow from "dayjs/plugin/relativeTime";
 import { downloadFile } from "~/utils/helpers";
 import DropDownMenu from "../DropDownMenu";
 import { useSession } from "next-auth/react";
+import { ChangeEvent } from "react";
 dayjs.extend(fromNow);
 const openModal = (modalName: string) => {
   const modal = document.getElementById(modalName);
@@ -19,12 +20,14 @@ const FileCard = ({
   onCheckinClicked,
   onEditClicked,
   onCheckoutClicked,
+  onSelected,
 }: {
   file: File;
   onDeleteClicked: (id: number) => void;
   onCheckinClicked: (id: number) => void;
   onEditClicked: (id: number) => void;
   onCheckoutClicked: (id: number) => void;
+  onSelected: (id: number, value: boolean) => void;
 }) => {
   const { data: session } = useSession();
 
@@ -38,6 +41,14 @@ const FileCard = ({
           },
         },
         {
+          label: "Details",
+          color: "info",
+          action: () => {
+            openModal("edit-file-modal");
+            onEditClicked(file.id);
+          },
+        },
+        {
           label: "Download",
           color: "secondary",
           action: () => {
@@ -48,19 +59,13 @@ const FileCard = ({
     : file.takenById === session?.user?.id
       ? [
           {
-            label: "Delete",
-            color: "error",
-            action: () => {
-              openModal("delete-file-modal");
-              onDeleteClicked(file.id);
-            },
-          },
-          {
             label: "Edit",
             color: "info",
             action: () => {
-              openModal("edit-file-modal");
               onEditClicked(file.id);
+              setTimeout(() => {
+                openModal("edit-file-modal");
+              }, 0);
             },
           },
           {
@@ -77,8 +82,24 @@ const FileCard = ({
               downloadFile(file.path);
             },
           },
+          {
+            label: "Delete",
+            color: "error",
+            action: () => {
+              openModal("delete-file-modal");
+              onDeleteClicked(file.id);
+            },
+          },
         ]
       : [
+          {
+            label: "Details",
+            color: "info",
+            action: () => {
+              openModal("edit-file-modal");
+              onEditClicked(file.id);
+            },
+          },
           {
             label: "Download",
             color: "secondary",
@@ -88,8 +109,19 @@ const FileCard = ({
           },
         ];
 
+  function handleSelectChange(e: ChangeEvent) {
+    onSelected(file.id, (e.target as HTMLInputElement).checked);
+  }
+
   return (
     <div className="relative flex flex-col gap-4 rounded-lg bg-base-200 px-4 py-2 text-sm">
+      {!file.takenById && (
+        <input
+          type="checkbox"
+          className="checkbox absolute left-3 top-3"
+          onChange={handleSelectChange}
+        />
+      )}
       <div className="flex flex-row-reverse">
         <DropDownMenu items={dropDownItems} />
       </div>

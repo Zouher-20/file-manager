@@ -9,34 +9,49 @@ import ConfirmModal from "~/components/modal/ConfirmModal";
 import FileModal from "~/components/modal/FileModal";
 import { api } from "~/utils/api";
 import fromNow from "dayjs/plugin/relativeTime";
+import { EditModal } from "~/components/modal/EditModal";
+import { useSession } from "next-auth/react";
 dayjs.extend(fromNow);
-
 const Files = () => {
+  const { data: session } = useSession();
   const [fileId, setFileId] = useState<number | null>(null);
+
   const [minutesPassed, setMinutesPassed] = useState<number>(0);
   setInterval(() => {
     setMinutesPassed(minutesPassed + 1);
   }, 60000);
+
   const router = useRouter();
+
   const { data, isSuccess, isLoading, dataUpdatedAt, refetch } =
     api.file.getAllFileInGroup.useQuery({
       groupId: parseInt(router.query?.id as string),
     });
+
   const createFileMutation = api.file.createFile.useMutation();
   const deleteFileMutation = api.file.deleteFile.useMutation();
+  const editFileMutation = api.file.deleteFile.useMutation();
   const checkinFileMutation = api.file.checkin.useMutation();
+  const bulkCheckinMutation = api.file.bulkCheckin.useMutation();
   const checkoutMutation = api.file.checkout.useMutation();
 
   const lastSync = useMemo(() => {
     return dayjs(dataUpdatedAt).fromNow();
   }, [minutesPassed]);
 
+  const canEditFile = useMemo(() => {
+    var fileQuery = data?.files.find((file) => file.id === fileId);
+    return session?.user?.id === fileQuery?.takenById;
+  }, [fileId]);
+
+  const [bulkSet, setBulkSet] = useState<Array<number>>([]);
   const openModal = (modalName: string) => {
     const modal = document.getElementById(modalName);
     if (modal !== null) {
       (modal as unknown as { showModal: () => void }).showModal();
     }
   };
+
   const createFile = ({
     name,
     contents,
@@ -55,6 +70,7 @@ const Files = () => {
           }
         });
   };
+
   const deleteFile = () => {
     if (fileId)
       deleteFileMutation.mutateAsync(fileId).then((res) => {
@@ -65,6 +81,18 @@ const Files = () => {
         }
       });
   };
+
+  const editFile = () => {
+    if (fileId)
+      deleteFileMutation.mutateAsync(fileId).then((res) => {
+        if (res?.id) {
+          toast.success("Group deleted successfully!");
+          refetch();
+          setMinutesPassed(minutesPassed + 1);
+        }
+      });
+  };
+
   const checkinFile = (id: number) => {
     checkinFileMutation.mutateAsync(id).then((res) => {
       if (res?.id) {
@@ -74,6 +102,7 @@ const Files = () => {
       }
     });
   };
+
   const checkoutFile = (id: number) => {
     checkoutMutation.mutateAsync(id).then((res) => {
       if (res?.id) {
@@ -84,9 +113,30 @@ const Files = () => {
     });
   };
 
+  const updateBulkSet = (id: number, isChecked: boolean) => {
+    if (isChecked) setBulkSet([...bulkSet, id]);
+    else {
+      setBulkSet(bulkSet.filter((arrId) => arrId !== id));
+    }
+  };
+
+  const bulkCheckin = () => {
+    bulkCheckinMutation.mutateAsync(bulkSet).then((res) => {
+      if (res?.count) {
+        toast.success("Files are checked in by you now");
+        refetch();
+        setMinutesPassed(minutesPassed + 1);
+        setBulkSet([]);
+      }
+    });
+  };
+
+  const isBulkInvoked = useMemo(() => {
+    return bulkSet.length > 0;
+  }, [bulkSet]);
+
   return (
     <>
-      {" "}
       <ConfirmModal
         id="delete-file-modal"
         title="Confirm deleting file"
@@ -95,44 +145,68 @@ const Files = () => {
         color="error"
         callback={deleteFile}
       />
+
       <FileModal
         btnLabel="create"
         title="create file"
         id="create-file-modal"
         color="success"
-        onSubmit={(form: { name: string; contents: string }) =>
-          createFile(form)
-        }
+        onSubmit={createFile}
       />
+
+      {fileId && (
+        <EditModal
+          id="edit-file-modal"
+          fileId={fileId}
+          isCheckedIn={canEditFile}
+          onSubmit={editFile}
+        />
+      )}
+
       <MainLayout>
         {isLoading && <div className="text-xl">Loading...</div>}
         {isSuccess && !isLoading && data && (
           <div>
             <div className="my-6 flex items-center justify-between">
-              <h1 className=" text-3xl font-bold">{data.name}</h1>
-              <div className="space-x-2">
-                <span className="text-xs">Last sync : {lastSync}</span>
-                <button
-                  className="btn btn-info btn-sm capitalize text-base-100"
-                  onClick={async () => {
-                    await refetch();
-                    setMinutesPassed(minutesPassed + 1);
-                  }}
-                >
-                  sync
-                </button>
-                <button
-                  className="btn btn-success btn-sm capitalize text-base-100"
-                  onClick={() => {
-                    openModal("create-file-modal");
-                  }}
-                >
-                  Create file
-                </button>
+              <h1 className=" text-3xl font-bold">
+                {data.name}
+                <span className="block text-xs">Last sync : {lastSync}</span>
+              </h1>
+              <div className="flex flex-col gap-4">
+                <div className="space-x-2">
+                  <button
+                    className="btn btn-info btn-sm capitalize text-base-100"
+                    onClick={async () => {
+                      await refetch();
+                      setMinutesPassed(minutesPassed + 1);
+                    }}
+                  >
+                    sync
+                  </button>
+                  <button
+                    className="btn btn-success btn-sm capitalize text-base-100"
+                    onClick={() => {
+                      openModal("create-file-modal");
+                    }}
+                  >
+                    Create file
+                  </button>
+                </div>
+                {isBulkInvoked && (
+                  <div className=" text-sm text-info">
+                    selected : {bulkSet.length}{" "}
+                    <button
+                      onClick={bulkCheckin}
+                      className="btn btn-primary btn-sm ms-1"
+                    >
+                      Checkin
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             {data?.files.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
                 {data.files.map((file) => (
                   <FileCard
                     key={file.id}
@@ -140,6 +214,7 @@ const Files = () => {
                     onCheckinClicked={checkinFile}
                     onCheckoutClicked={checkoutFile}
                     onEditClicked={setFileId}
+                    onSelected={updateBulkSet}
                     file={file}
                   />
                 ))}

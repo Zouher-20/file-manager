@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import UsersModal from "~/components/modal/UsersModal";
 
 const MyGroups = () => {
-  const { data, isLoading, isSuccess } = api.file.getUserGroups.useQuery({});
+  const { data, isLoading,refetch, isSuccess } = api.file.getUserGroups.useQuery({});
   const sharedGroups = api.file.getSharedGroups.useQuery({});
 
   const createGroupMutation = api.file.addNewGroup.useMutation();
@@ -31,6 +31,7 @@ const MyGroups = () => {
       if (res?.id) {
         setGroupsData([...groupsData, res]);
         toast.success("Group created successfully!");
+        refetch()
       }
     });
   };

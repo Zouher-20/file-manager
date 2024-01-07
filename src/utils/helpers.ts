@@ -12,3 +12,9 @@ export function downloadFile(url: string, name = "file.txt") {
     link.click();
     document.body.removeChild(link);
 }
+
+export function getFileName(filePath: string) {
+    const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+    return fileName;
+}
+

@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { connect } from "react-redux";
-import SearchFeild from "../form/SearchField";
 import { User } from "@prisma/client";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";

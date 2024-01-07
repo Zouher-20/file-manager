@@ -10,7 +10,11 @@ import {
   deleteFile,
   createGroup,
   checkin,
-  checkout
+  checkout,
+  getFileDetails,
+  getRawFile,
+  updateFile,
+  bulkCheckin
 } from "./controller";
 
 const trpcRoutes = {
@@ -23,8 +27,12 @@ const trpcRoutes = {
   addNewGroup: createGroup,
   updateGroup: updateGroup,
   deleteFile: deleteFile,
+  updateFile,
+  getFileDetails: getFileDetails,
+  getRawFile,
   checkin,
-  checkout
+  checkout,
+  bulkCheckin
 };
 
 export const fileRouter = createTRPCRouter(trpcRoutes);

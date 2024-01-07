@@ -112,6 +112,20 @@ export class FilesService {
       },
     });
   }
+
+  async updateFile(fileId: number, content: string) {
+
+    return await db.file.update({
+      where: {
+        id: fileId,
+      },
+      data: {
+        updatedAt: new Date(),
+      },
+    });
+  }
+
+
   async getAllFileInGroup(
     userId: string,
     page: number,
@@ -165,6 +179,28 @@ export class FilesService {
       }
     });
   }
+  async getFileDetails(fileId: number) {
+    return await db.file.findUnique({
+      where: {
+        id: fileId,
+      },
+      include: {
+        createdBy: true,
+        takenBy: true,
+      }
+    });
+  }
 
-
+  async bulkCheckin(filesIds: number[], userId: string) {
+    return await db.file.updateMany({
+      where: {
+        id: {
+          in: filesIds
+        }
+      },
+      data: {
+        takenById: userId
+      }
+    });
+  }
 }

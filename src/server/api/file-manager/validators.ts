@@ -2,12 +2,16 @@ import { z } from "zod";
 
 export const deleteGroupValidator = z.number();
 export const leaveGroupValidator = z.number();
-
+export const bulkCheckinValidator = z.array(z.number())
 export const updateGroupValidator = z.object({
   groupName: z.string().min(1),
   groupId: z.number(),
 });
 
+export const updateFileValidator = z.object({
+  fileId: z.number(),
+  contents: z.string()
+})
 export const creatNewGroupValidator = z.object({
   groupName: z.string().min(1),
 });
@@ -49,6 +53,8 @@ export const filterFilestatusValidator = z.object({
 export const deleteFileValidator = z.number();
 export const checkinValidator = z.number();
 export const checkoutValidator = z.number();
+export const fileDetailsValidator = z.number();
+
 
 
 
