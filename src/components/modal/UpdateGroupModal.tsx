@@ -134,6 +134,7 @@ function UpdateGroupModal({
                 maxLength={5}
                 className="input input-bordered w-full "
               />
+              <small>1 means only group owner</small>
             </div>
             <div className="flex flex-col gap-1 pb-4">
               <label className="mb-1 font-bold">files limit</label>

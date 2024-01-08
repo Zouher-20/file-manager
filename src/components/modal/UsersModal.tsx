@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { User } from "@prisma/client";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { useMemo } from "react";
 
 const mapStateToProps = (state: any) => ({
   ...state.ModalReducer,
@@ -11,9 +12,16 @@ const mapStateToProps = (state: any) => ({
 function UsersModal({ groupId }: { groupId: number }) {
   const usersToAddQuery = api.user.getUsersOutsideGroup.useQuery(groupId);
   const usersInGroupQuery = api.user.getUsersInGroup.useQuery(groupId);
+  const groupDataQuery = api.file.getGroupById.useQuery(groupId);
 
   const addToGroupMutation = api.user.addUserToGroup.useMutation();
   const removeFromGroupMutation = api.user.removeUserFromGroup.useMutation();
+
+  const isAddingDisabled = useMemo(() => {
+    if (groupDataQuery.data && usersInGroupQuery.data) {
+      return usersInGroupQuery.data.length >= groupDataQuery.data.usersLimit;
+    }
+  }, [groupDataQuery.data, usersInGroupQuery.data]);
 
   const addToGroup = (id: string) => {
     addToGroupMutation.mutateAsync({ userId: id, groupId }).then((res) => {
@@ -49,20 +57,26 @@ function UsersModal({ groupId }: { groupId: number }) {
         </form>
         <h3 className="mb-4 text-lg font-bold">Manage group users :</h3>
         {/* <SearchFeild /> */}
-        {usersToAddQuery.data && (
-          <UserList
-            out={true}
-            addClicked={addToGroup}
-            removeClicked={removeFromGroup}
-            items={usersToAddQuery.data}
-          />
-        )}
+
         {usersInGroupQuery.data && (
           <UserList
             out={false}
             addClicked={addToGroup}
             removeClicked={removeFromGroup}
             items={usersInGroupQuery.data}
+          />
+        )}
+        {isAddingDisabled && (
+          <div className="text-center text-error opacity-75">
+            Can't add more users to group, users limit reached
+          </div>
+        )}
+        {usersToAddQuery.data && !isAddingDisabled && (
+          <UserList
+            out={true}
+            addClicked={addToGroup}
+            removeClicked={removeFromGroup}
+            items={usersToAddQuery.data}
           />
         )}
       </div>

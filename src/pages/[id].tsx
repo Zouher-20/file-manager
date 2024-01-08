@@ -11,6 +11,8 @@ import { api } from "~/utils/api";
 import fromNow from "dayjs/plugin/relativeTime";
 import { EditModal } from "~/components/modal/EditModal";
 import { useSession } from "next-auth/react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import Link from "next/link";
 dayjs.extend(fromNow);
 const Files = () => {
   const { data: session } = useSession();
@@ -171,7 +173,10 @@ const Files = () => {
         {isLoading && <div className="text-xl">Loading...</div>}
         {isSuccess && !isLoading && data && (
           <div>
-            <div className="my-6 flex items-center justify-between">
+            <Link className="block w-fit hover:text-primary" href="/">
+              <Icon icon="solar:arrow-left-broken" className="h-10 w-10 " />
+            </Link>
+            <div className="mb-6 mt-2 flex items-center justify-between">
               <h1 className=" text-3xl font-bold">
                 {data.name}
                 <span className="block text-xs">Last sync : {lastSync}</span>
