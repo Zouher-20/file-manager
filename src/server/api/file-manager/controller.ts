@@ -157,7 +157,12 @@ export const deleteFile = protectedProcedure
   .mutation(async ({ input, ctx }) => {
     try {
       const fileId = input;
-      const data = await filesService.deleteFile(ctx.session.user.id, fileId);
+      const data = await filesService.deleteFile(ctx.session.user.id, fileId).then((data) => {
+        if (data) {
+          fs.rm(data.path)
+          return data
+        }
+      })
       return data;
     } catch (error) {
       console.error("Procedure Error:", error);
