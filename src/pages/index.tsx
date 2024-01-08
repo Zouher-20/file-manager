@@ -1,19 +1,20 @@
 import GroupCard from "~/components/cards/Group";
 import { useEffect, useState } from "react";
-import GridListComponent from "~/components/form/GridList";
 import ConfirmModal from "~/components/modal/ConfirmModal";
 import { MainLayout } from "~/components/layout/MainLayout";
-import GroupModal from "~/components/modal/GroupModal";
 import { api } from "~/utils/api";
 import { Group } from "@prisma/client";
 import NoGroupsCaption from "~/components/NoGroupsCaption";
 import toast from "react-hot-toast";
 import UsersModal from "~/components/modal/UsersModal";
+import CreateGroupModal from "~/components/modal/CreateGroupModal";
+import UpdateGroupModal from "~/components/modal/UpdateGroupModal";
 
 const MyGroups = () => {
-  const { data, isLoading,refetch, isSuccess } = api.file.getUserGroups.useQuery({});
-  const sharedGroups = api.file.getSharedGroups.useQuery({});
+  const { data, isLoading, refetch, isSuccess } =
+    api.file.getUserGroups.useQuery({});
 
+  const sharedGroups = api.file.getSharedGroups.useQuery({});
   const createGroupMutation = api.file.addNewGroup.useMutation();
   const updateGroupMutation = api.file.updateGroup.useMutation();
   const deltetGroupMutation = api.file.deleteGroup.useMutation();
@@ -26,19 +27,29 @@ const MyGroups = () => {
     if (data) setGroupsData(data);
   }, [isSuccess]);
 
-  const Submit = (groupName: string) => {
-    createGroupMutation.mutateAsync({ groupName }).then((res) => {
+  const Submit = (inputObj: {
+    name: string;
+    checkinTimeOut: number;
+    filesLimit: number;
+    usersLimit: number;
+  }) => {
+    createGroupMutation.mutateAsync(inputObj).then((res) => {
       if (res?.id) {
         setGroupsData([...groupsData, res]);
         toast.success("Group created successfully!");
-        refetch()
+        refetch();
       }
     });
   };
 
-  const changeName = (groupName: string) => {
+  const updateGroup = (inputObj: {
+    name: string;
+    checkinTimeOut: number;
+    filesLimit: number;
+    usersLimit: number;
+  }) => {
     if (groupId)
-      updateGroupMutation.mutateAsync({ groupId, groupName }).then((res) => {
+      updateGroupMutation.mutateAsync({ groupId, ...inputObj }).then((res) => {
         if (res?.id) {
           var updated = [...groupsData];
           updated.splice(
@@ -81,20 +92,33 @@ const MyGroups = () => {
 
   return (
     <>
-      <GroupModal
+      <CreateGroupModal
         btnLabel="create"
         title="create group"
         id="create-group-modal"
         color="success"
-        onSubmit={(name: string) => Submit(name)}
+        onSubmit={(inputObj: {
+          name: string;
+          checkinTimeOut: number;
+          filesLimit: number;
+          usersLimit: number;
+        }) => Submit(inputObj)}
       />
-      <GroupModal
-        btnLabel="change"
-        title="Change Group Name"
-        id="change-name-modal"
-        color="primary"
-        onSubmit={(name: string) => changeName(name)}
-      />
+      {groupId && (
+        <UpdateGroupModal
+          btnLabel="update"
+          title="update Group"
+          id="update-group-modal"
+          color="primary"
+          groupId={groupId}
+          onSubmit={(inputObj: {
+            name: string;
+            checkinTimeOut: number;
+            filesLimit: number;
+            usersLimit: number;
+          }) => updateGroup(inputObj)}
+        />
+      )}
       <ConfirmModal
         id="leave-modal"
         title="Confirm leaving group"
@@ -129,7 +153,7 @@ const MyGroups = () => {
                 return (
                   <div key={group.id}>
                     <GroupCard
-                      onChangeNameClicked={setGroupId}
+                      onUpdateClicked={setGroupId}
                       onDeleteGroupClicked={setGroupId}
                       onUsersClicked={setGroupId}
                       group={group}

@@ -16,15 +16,16 @@ datasource db {
 }
 
 model File {
-    id          Int      @id @default(autoincrement())
+    id          Int       @id @default(autoincrement())
     path        String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    createdBy   User     @relation(name: "author", fields: [createdById], references: [id], onDelete: Cascade)
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    checkedinAt DateTime?
+    createdBy   User      @relation(name: "author", fields: [createdById], references: [id], onDelete: Cascade)
     createdById String
-    takenBy     User?    @relation(name: "taker", fields: [takenById], references: [id], onDelete: Cascade)
+    takenBy     User?     @relation(name: "taker", fields: [takenById], references: [id], onDelete: Cascade)
     takenById   String?
-    group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
     groupId     Int
     name        String
 
@@ -32,14 +33,18 @@ model File {
 }
 
 model Group {
-    id          Int             @id @default(autoincrement())
-    name        String
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @updatedAt
-    createdBy   User            @relation(fields: [createdById], references: [id])
-    createdById String
-    files       File[]
-    users       UsersOnGroups[]
+    id                  Int             @id @default(autoincrement())
+    name                String
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+    createdBy           User            @relation(fields: [createdById], references: [id])
+    createdById         String
+    checkinTimeOut      Int
+    usersLimit          Int
+    filesLimit          Int
+    checkedinFilesLimit Int?
+    files               File[]
+    users               UsersOnGroups[]
 
     @@index([id])
 }

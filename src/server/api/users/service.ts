@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 
-import { Prisma, User } from '@prisma/client'
+import { Prisma, User } from "@prisma/client";
 
 export class UserService {
     async create(payload: Prisma.UserCreateInput) {
@@ -9,19 +9,18 @@ export class UserService {
         });
     }
 
-
     async getOutGroup(idUser: string, groupId: number): Promise<User[] | null> {
         return await db.user.findMany({
             where: {
                 NOT: {
                     groups: {
                         some: {
-                            groupId
-                        }
-                    }
-                }
-            }
-        })
+                            groupId,
+                        },
+                    },
+                },
+            },
+        });
     }
 
     async getInGroup(idUser: string, groupId: number): Promise<User[] | null> {
@@ -31,50 +30,99 @@ export class UserService {
                     {
                         groups: {
                             some: {
-                                groupId
-                            }
-                        }
+                                groupId,
+                            },
+                        },
                     },
                     {
                         id: {
-                            not: idUser
-                        }
-                    }
-                ]
-            }
-        })
+                            not: idUser,
+                        },
+                    },
+                ],
+            },
+        });
     }
 
     async addToGroup(userId: string, groupId: number): Promise<User | null> {
         return await db.user.update({
             where: {
-                id: userId
+                id: userId,
             },
             data: {
                 groups: {
                     create: {
                         groupId,
-                    }
-                }
-            }
-        })
+                    },
+                },
+            },
+        });
     }
 
     async removeFromGroup(userId: string, groupId: number): Promise<User | null> {
         return await db.user.update({
             where: {
-                id: userId
+                id: userId,
             },
             data: {
                 groups: {
                     deleteMany: {
-                        groupId
-                    }
-                }
-            }
-        })
+                        groupId,
+                    },
+                },
+            },
+        });
+    }
+
+    async isGroupOwner(groupId: number, userId: string) {
+        const data = await db.group.findUnique({
+            where: {
+                id: groupId
+            },
+        });
+        return data?.createdById === userId;
     }
 
 
+    async hasAccessToGroup(fileId: number, userId: string) {
+        const data = await db.group.findMany({
+            where: {
+                AND: [
+                    {
+                        users: {
+                            some: {
+                                userId: userId,
+                            },
+                        },
+                    },
+                    {
+                        files: {
+                            some: {
+                                id: fileId,
+                            },
+                        },
+                    },
+                ],
+            },
+        });
+        return data.length > 0;
+    }
 
+    async canUpdateFile(fileId: number, userId: string) {
+        const data = await db.file.findUnique({
+            where: {
+                id: fileId,
+            },
+        });
+        return data?.takenById === userId;
+    }
+
+    async canUpdateGroup(groupId: number, userId: string) {
+        const data = await db.group.findUnique({
+            where: {
+                id: groupId,
+            },
+        });
+        return data?.createdById === userId;
+    }
 }

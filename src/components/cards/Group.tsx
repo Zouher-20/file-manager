@@ -16,13 +16,13 @@ const openModal = (modalName: string) => {
 const Group = ({
   group,
   onDeleteGroupClicked,
-  onChangeNameClicked,
+  onUpdateClicked,
   onLeaveGroupClicked,
   onUsersClicked,
 }: {
   group: Group & { createdBy: Pick<User, "id" | "name"> };
   onDeleteGroupClicked: (id: number) => void;
-  onChangeNameClicked: (id: number) => void;
+  onUpdateClicked: (id: number) => void;
   onLeaveGroupClicked: (id: number) => void;
   onUsersClicked: (id: number) => void;
 }) => {
@@ -31,11 +31,13 @@ const Group = ({
     session?.user?.id === group.createdById
       ? [
           {
-            label: "Change name",
+            label: "Update",
             color: "primary",
             action: () => {
-              openModal("change-name-modal");
-              onChangeNameClicked(group.id);
+              onUpdateClicked(group.id);
+              setTimeout(() => {
+                openModal("update-group-modal");
+              }, 0);
             },
           },
           {

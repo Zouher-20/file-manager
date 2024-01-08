@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { db } from "~/server/db";
-import fs from "fs";
 import { Group } from "@prisma/client";
 
 export class FilesService {
@@ -59,10 +58,15 @@ export class FilesService {
       },
     });
   }
-  async addNewGroup(groupName: string, userId: string) {
+  async addNewGroup(groupData: {
+    name: string;
+    checkinTimeOut: number;
+    filesLimit: number;
+    usersLimit: number;
+  }, userId: string) {
     return await db.group.create({
       data: {
-        name: groupName,
+        ...groupData,
         createdById: userId,
         users: {
           create: [
@@ -102,19 +106,23 @@ export class FilesService {
       },
     });
   }
-  async updateGroup(id: number, groupName: string) {
+  async updateGroup(id: number, groupData: {
+    name: string;
+    checkinTimeOut: number;
+    filesLimit: number;
+    usersLimit: number;
+  }) {
     return await db.group.update({
       where: {
         id,
       },
       data: {
-        name: groupName,
+        ...groupData
       },
     });
   }
 
   async updateFile(fileId: number, content: string) {
-
     return await db.file.update({
       where: {
         id: fileId,
@@ -124,7 +132,6 @@ export class FilesService {
       },
     });
   }
-
 
   async getAllFileInGroup(
     userId: string,
@@ -165,8 +172,9 @@ export class FilesService {
         id: fileId,
       },
       data: {
-        takenById: userId
-      }
+        takenById: userId,
+        checkedinAt: new Date(),
+      },
     });
   }
   async checkoutFile(userId: string, fileId: number) {
@@ -175,8 +183,9 @@ export class FilesService {
         id: fileId,
       },
       data: {
-        takenById: null
-      }
+        takenById: null,
+        checkedinAt: null,
+      },
     });
   }
   async getFileDetails(fileId: number) {
@@ -187,7 +196,7 @@ export class FilesService {
       include: {
         createdBy: true,
         takenBy: true,
-      }
+      },
     });
   }
 
@@ -195,12 +204,54 @@ export class FilesService {
     return await db.file.updateMany({
       where: {
         id: {
-          in: filesIds
-        }
+          in: filesIds,
+        },
       },
       data: {
-        takenById: userId
-      }
+        takenById: userId,
+        checkedinAt: new Date(),
+      },
     });
+  }
+
+  async isFileAvailable(fileId: number) {
+    const data = await db.file.findUnique({
+      where: {
+        id: fileId,
+      },
+    });
+    return data?.takenById === null;
+  }
+
+  async getGroupConfig(groupId: number) {
+    return await db.group.findUnique({
+      select: {
+        id: true,
+        usersLimit: true,
+        checkinTimeOut: true,
+        filesLimit: true,
+      },
+      where: {
+        id: groupId
+      }
+    })
+  }
+  async getGroupByFile(fileId: number) {
+    return await db.group.findFirst({
+      where: {
+        files: {
+          some: {
+            id: fileId
+          }
+        }
+      }
+    })
+  }
+  async getGroupById(groupId: number) {
+    return await db.group.findUnique({
+      where: {
+        id: groupId
+      }
+    })
   }
 }

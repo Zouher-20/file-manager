@@ -9,14 +9,14 @@
 
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { getServerSession, type Session } from "next-auth";
+import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { getSession } from 'next-auth/react';
 import { db } from "~/server/db";
 import { getServerAuthSession } from "../auth";
-
+import { NextApiRequest, NextApiResponse } from "next";
+import { rateLimit } from 'express-rate-limit'
 /**
  * 1. CONTEXT
  *
@@ -27,6 +27,8 @@ import { getServerAuthSession } from "../auth";
 
 interface CreateContextOptions {
   session: Session | null;
+  req: NextApiRequest,
+  res: NextApiResponse
 }
 
 /**
@@ -46,6 +48,16 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   };
 };
 
+
+const rateLimitMiddleware = () => {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+  })
+  return limiter
+};
 /**
  * This is the actual context you will use in your router. It will be used to process every request
  * that goes through your tRPC endpoint.
@@ -55,11 +67,15 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
 
+
+
   // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession({ req , res });
+  const session = await getServerAuthSession({ req, res });
 
   return createInnerTRPCContext({
     session,
+    req,
+    res
   });
 };
 
@@ -110,7 +126,7 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  
+
   if (!ctx.session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
@@ -122,6 +138,10 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+const rateLimitMiddlewareTrpc = () => {
+  return rateLimitMiddleware
+};
+
 /**
  * Protected (authenticated) procedure
  *
@@ -130,4 +150,4 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)

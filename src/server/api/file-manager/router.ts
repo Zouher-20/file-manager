@@ -14,7 +14,8 @@ import {
   getFileDetails,
   getRawFile,
   updateFile,
-  bulkCheckin
+  bulkCheckin,
+  getGroupById
 } from "./controller";
 
 const trpcRoutes = {
@@ -32,7 +33,8 @@ const trpcRoutes = {
   getRawFile,
   checkin,
   checkout,
-  bulkCheckin
+  bulkCheckin,
+  getGroupById
 };
 
 export const fileRouter = createTRPCRouter(trpcRoutes);

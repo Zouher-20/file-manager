@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 import {
   updateGroupValidator,
   deleteGroupValidator,
@@ -13,14 +13,16 @@ import {
   fileDetailsValidator,
   updateFileValidator,
   bulkCheckinValidator,
+  getGroupByIdValidator,
 } from "./validators";
 import { FilesService } from "./service";
 import fs from "fs/promises";
 import path from "path";
-import { createReadStream, existsSync, readFileSync } from "fs";
-import { getFileName } from '../../../utils/helpers'
-
+import { existsSync, readFileSync } from "fs";
+import { UserService } from "../users/service";
 const filesService = new FilesService();
+const userService = new UserService();
+
 
 export const leaveGroup = protectedProcedure
   .input(leaveGroupValidator)
@@ -48,8 +50,10 @@ export const updateGroup = protectedProcedure
   .input(updateGroupValidator)
   .mutation(async ({ input, ctx }) => {
     try {
-      const { groupId, groupName } = input;
-      const data = await filesService.updateGroup(groupId, groupName);
+      const { groupId, name, filesLimit, usersLimit, checkinTimeOut } = input;
+      const data = await filesService.updateGroup(groupId, {
+        name, filesLimit, usersLimit, checkinTimeOut
+      });
       return data;
     } catch (error) {
       console.error("Procedure Error:", error);
@@ -137,9 +141,9 @@ export const createGroup = protectedProcedure
   .input(creatNewGroupValidator)
   .mutation(async ({ input, ctx }) => {
     try {
-      const { groupName } = input;
+      const inputObj = input;
       const data = await filesService.addNewGroup(
-        groupName,
+        inputObj,
         ctx.session.user.id,
       );
       return data;
@@ -164,8 +168,19 @@ export const checkin = protectedProcedure
   .mutation(async ({ input, ctx }) => {
     try {
       const fileId = input;
-      const data = await filesService.checkinFile(ctx.session.user.id, fileId);
-      return data;
+      const group = await filesService.getGroupByFile(fileId)
+      if (group) {
+        const data = await filesService.checkinFile(ctx.session.user.id, fileId).then((data) => {
+          setTimeout(() => {
+            filesService.checkoutFile(ctx.session.user.id, fileId);
+          }, group.checkinTimeOut * 60000)
+          return data
+        })
+        return data;
+      }
+      else {
+        throw new Error('Invalid file')
+      }
     } catch (error) {
       console.error("Procedure Error:", error);
     }
@@ -242,6 +257,20 @@ export const bulkCheckin = protectedProcedure
     try {
       const data = await filesService.bulkCheckin(ids, ctx.session.user.id);
       return data;
+    } catch (error) {
+      console.error("Procedure Error:", error);
+    }
+  });
+
+export const getGroupById = protectedProcedure
+  .input(getGroupByIdValidator)
+  .query(async ({ input, ctx }) => {
+    try {
+      const groupId = input;
+      const data = await filesService.getGroupById(
+        groupId
+      );
+      return data
     } catch (error) {
       console.error("Procedure Error:", error);
     }

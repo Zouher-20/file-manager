@@ -2,10 +2,15 @@ import { z } from "zod";
 
 export const deleteGroupValidator = z.number();
 export const leaveGroupValidator = z.number();
+export const getGroupByIdValidator = z.number();
+
 export const bulkCheckinValidator = z.array(z.number())
 export const updateGroupValidator = z.object({
-  groupName: z.string().min(1),
+  name: z.string().min(1),
   groupId: z.number(),
+  checkinTimeOut: z.number().min(1),
+  filesLimit: z.number().min(1),
+  usersLimit: z.number().min(1),
 });
 
 export const updateFileValidator = z.object({
@@ -13,7 +18,10 @@ export const updateFileValidator = z.object({
   contents: z.string()
 })
 export const creatNewGroupValidator = z.object({
-  groupName: z.string().min(1),
+  name: z.string().min(1),
+  checkinTimeOut: z.number().min(1),
+  filesLimit: z.number().min(1),
+  usersLimit: z.number().min(1),
 });
 
 export const editFileValidator = z.object({

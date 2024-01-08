@@ -1,4 +1,6 @@
 export const NO_SPECIAL_CHARS_REGEX = "[A-Za-z0-9 ]+"
+export const NUMBERS_ONLY_REGEX = "[0-9]+"
+
 /**
  * download a file for a specific name
  * @param file : a blob or file object to download

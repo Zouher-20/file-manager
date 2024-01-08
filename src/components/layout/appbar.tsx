@@ -26,7 +26,6 @@ const Appbar = () => {
   return (
     <div className="navbar bg-primary sm:px-4">
       <div className="navbar-start">
-        <DropdownMenu />
         <div className="flex items-center gap-2">
           <div className="avatar placeholder hidden sm:block ">
             <div className="rounded-full bg-base-200 p-4 text-primary">
@@ -79,26 +78,3 @@ const Appbar = () => {
 };
 
 export default Appbar;
-
-const DropdownMenu = () => {
-  return (
-    <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        <Icon
-          className="h-8 w-8 text-base-100 "
-          icon="solar:hamburger-menu-broken"
-        />
-      </div>
-      <ul className="menu dropdown-content z-[1] mt-3 w-52 rounded-box border border-primary bg-base-100 p-2 shadow ">
-        <li>
-          {" "}
-          <Link href="/">My Groups</Link>
-        </li>
-        <li>
-          {" "}
-          <Link href="/my-files">My Files</Link>
-        </li>
-      </ul>
-    </div>
-  );
-};

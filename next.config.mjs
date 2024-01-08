@@ -3,7 +3,7 @@
  * for Docker builds.
  */
 await import("./src/env.mjs");
-
+import { createSecureHeaders } from "next-secure-headers";
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -16,6 +16,14 @@ const config = {
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: createSecureHeaders(),
+      },
+    ];
   },
 };
 

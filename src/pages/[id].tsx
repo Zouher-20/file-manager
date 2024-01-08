@@ -75,7 +75,7 @@ const Files = () => {
     if (fileId)
       deleteFileMutation.mutateAsync(fileId).then((res) => {
         if (res?.id) {
-          toast.success("Group deleted successfully!");
+          toast.success("File deleted successfully!");
           refetch();
           setMinutesPassed(minutesPassed + 1);
         }
@@ -84,9 +84,9 @@ const Files = () => {
 
   const editFile = () => {
     if (fileId)
-      deleteFileMutation.mutateAsync(fileId).then((res) => {
+      editFileMutation.mutateAsync(fileId).then((res) => {
         if (res?.id) {
-          toast.success("Group deleted successfully!");
+          toast.success("File Updated successfully!");
           refetch();
           setMinutesPassed(minutesPassed + 1);
         }
@@ -134,6 +134,10 @@ const Files = () => {
   const isBulkInvoked = useMemo(() => {
     return bulkSet.length > 0;
   }, [bulkSet]);
+
+  const isCreationDisabled = useMemo(() => {
+    if (data) return data?.files.length >= data?.filesLimit;
+  }, [data]);
 
   return (
     <>
@@ -184,6 +188,7 @@ const Files = () => {
                     sync
                   </button>
                   <button
+                    disabled={isCreationDisabled}
                     className="btn btn-success btn-sm capitalize text-base-100"
                     onClick={() => {
                       openModal("create-file-modal");

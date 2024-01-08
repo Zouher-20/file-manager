@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { FormEventHandler } from "react";
+import toast from "react-hot-toast";
 import { AuthLayout } from "~/components/layout/AuthLayout";
 import { api } from "~/utils/api";
-export default function Signup() {
-  const { isLoading, mutateAsync } = api.user.create.useMutation();
 
+import { useRouter } from "next/navigation";
+
+export default function Signup() {
+  const router = useRouter();
+  const { isLoading, mutateAsync } = api.user.create.useMutation();
   const signup: FormEventHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
@@ -14,7 +18,12 @@ export default function Signup() {
       password: formData.get("password")?.toString() || "",
       confirmPassword: formData.get("confirmPassword")?.toString() || "",
     }).then((res) => {
-      console.log(res);
+      if (res.id) {
+        toast.success("User Created Successfully");
+        router.push("/auth/signin");
+      } else {
+        toast.error("there was an error creating user");
+      }
     });
   };
 
@@ -84,8 +93,12 @@ export default function Signup() {
         </button>
 
         <div className="mb-3 mt-5 text-center">
-          Already has an account?<br/>
-          <Link href="/auth/signin" className="link-hover link-primary link font-bold">
+          Already has an account?
+          <br />
+          <Link
+            href="/auth/signin"
+            className="link-hover link-primary link font-bold"
+          >
             Signin
           </Link>
         </div>
