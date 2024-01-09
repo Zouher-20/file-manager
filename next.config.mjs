@@ -21,7 +21,10 @@ const config = {
     return [
       {
         source: "/(.*)",
-        headers: createSecureHeaders(),
+        headers: createSecureHeaders({
+          referrerPolicy: "same-origin",
+          frameGuard: "sameorigin",
+        }),
       },
     ];
   },

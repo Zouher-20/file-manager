@@ -134,7 +134,7 @@ function UserList({
 
 function UserInUsersListComponent({ item }: { item: User }) {
   return (
-    <div className=" ">
+    <div>
       <p className="text-sm font-bold">{item.name}</p>
       <p className="text-xs font-medium">{item.email}</p>
     </div>

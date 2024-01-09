@@ -22,7 +22,7 @@ import { existsSync, readFileSync } from "fs";
 import { UserService } from "../users/service";
 const filesService = new FilesService();
 const userService = new UserService();
-
+import dayjs from "dayjs";
 
 export const leaveGroup = protectedProcedure
   .input(leaveGroupValidator)
@@ -176,8 +176,16 @@ export const checkin = protectedProcedure
       const group = await filesService.getGroupByFile(fileId)
       if (group) {
         const data = await filesService.checkinFile(ctx.session.user.id, fileId).then((data) => {
-          setTimeout(() => {
-            filesService.checkoutFile(ctx.session.user.id, fileId);
+          setTimeout(async () => {
+            const file = await filesService.getFileDetails(fileId)
+            if (file) {
+              // const checkinDate = dayjs(file.checkedinAt)
+              // const currentDate = dayjs(new Date())
+              // if (checkinDate.diff(currentDate) >= group.checkinTimeOut * 60000) {
+              //   filesService.checkoutFile(ctx.session.user.id, fileId);
+              // }
+              filesService.checkoutFile(ctx.session.user.id, fileId);
+            }
           }, group.checkinTimeOut * 60000)
           return data
         })
